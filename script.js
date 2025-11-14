@@ -111,6 +111,13 @@ function socialLogin(provider) {
     showMessage('login-modal', `${provider.charAt(0).toUpperCase() + provider.slice(1)} login coming soon! Please use email for now.`, 'error');
 }
 
+// Password strength helper
+function isStrongPassword(pwd) {
+    // At least 8 characters, one lowercase, one uppercase, one number, one special character
+    const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s]).{8,}$/;
+    return re.test(pwd || '');
+}
+
 // Login function
 async function login(email, password) {
     // Simulate API call - replace with actual API
@@ -238,6 +245,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Clear previous messages
             messageDiv.innerHTML = '<div class="message" style="background: #e3f2fd; color: #1976d2; border: 1px solid #90caf9;">Logging in...</div>';
+
+            // Enforce strong password
+            if (!isStrongPassword(password)) {
+                showMessage('login-modal', 'Please enter a strong password (8+ chars, uppercase, lowercase, number, symbol).', 'error');
+                return;
+            }
 
             const result = await login(email, password);
 

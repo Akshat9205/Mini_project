@@ -2,7 +2,7 @@
 
 .profile-page {
     min-height: 100vh;
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    background: linear-gradient(180deg, #f8fafc 0%, #eef2f9 100%);
     padding: 2rem 0;
 }
 
@@ -13,15 +13,17 @@
 }
 
 .profile-header {
-    background: var(--light-color);
-    border-radius: 20px;
+    background: #ffffff;
+    border: 1px solid #eef0f6;
+    border-radius: 22px;
     padding: 2rem;
     margin-bottom: 2rem;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.08);
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     gap: 2rem;
+    color: var(--text-color);
 }
 
 .profile-avatar-section {
@@ -42,7 +44,8 @@
     height: 120px;
     border-radius: 50%;
     object-fit: cover;
-    border: 4px solid var(--primary-color);
+    border: 4px solid #eef0f6;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
     transition: all 0.3s ease;
 }
 
@@ -61,7 +64,7 @@
     justify-content: center;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(106, 17, 203, 0.3);
+    box-shadow: 0 10px 24px rgba(106, 17, 203, 0.25);
 }
 
 .avatar-edit-btn:hover {
@@ -70,16 +73,16 @@
 }
 
 .profile-info h1 {
-    font-size: 2.5rem;
-    font-weight: 700;
+    font-size: 2.2rem;
+    font-weight: 800;
     color: var(--text-color);
-    margin: 0 0 0.5rem 0;
+    margin: 0 0 0.25rem 0;
 }
 
 .profile-info p {
-    font-size: 1.1rem;
-    color: #666;
-    margin: 0 0 1.5rem 0;
+    font-size: 1rem;
+    color: #667085;
+    margin: 0 0 1.25rem 0;
 }
 
 .profile-stats {
@@ -94,37 +97,35 @@
 .stat-number {
     display: block;
     font-size: 1.8rem;
-    font-weight: 700;
+    font-weight: 800;
     color: var(--primary-color);
 }
 
 .stat-label {
-    font-size: 0.9rem;
-    color: #666;
+    font-size: 0.8rem;
+    color: #667085;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.8px;
 }
 
-.edit-profile-btn {
-    background: var(--primary-color);
-    color: white;
-    border: none;
-    border-radius: 12px;
-    padding: 12px 24px;
-    font-size: 1rem;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(106, 17, 203, 0.3);
+.edit-profile-btn { 
+    background: var(--brand-gradient); 
+    color: white; 
+    border: none; 
+    border-radius: 12px; 
+    padding: 12px 24px; 
+    font-size: 1rem; 
+    font-weight: 600; 
+    display: flex; 
+    align-items: center; 
+    gap: 8px; 
+    cursor: pointer; 
+    transition: all 0.3s ease; 
+    box-shadow: 0 8px 20px rgba(37,117,252,0.2); 
 }
-
 .edit-profile-btn:hover {
     transform: translateY(-2px);
-    background: var(--primary-dark);
-    box-shadow: 0 6px 20px rgba(106, 17, 203, 0.4);
+    box-shadow: 0 14px 28px rgba(37,117,252,0.35);
 }
 
 .profile-content {
@@ -133,21 +134,24 @@
     gap: 2rem;
 }
 
-.profile-section {
-    background: var(--light-color);
-    border-radius: 16px;
-    padding: 2rem;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+.profile-section { 
+    background: #ffffff; 
+    border: 1px solid #eef0f6; 
+    border-radius: 18px; 
+    padding: 2rem; 
+    box-shadow: 0 12px 30px rgba(0,0,0,0.08); 
+    color: var(--text-color); 
 }
 
-.profile-section h2 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--text-color);
-    margin: 0 0 1.5rem 0;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+.profile-section h2 { 
+    font-size: 1.2rem; 
+    font-weight: 700; 
+    color: var(--text-color); 
+    margin: 0 0 1.25rem 0; 
+    display: flex; 
+    align-items: center; 
+    gap: 0.5rem; 
+    letter-spacing: 0.3px; 
 }
 
 .info-grid {
@@ -168,31 +172,36 @@
     font-size: 0.9rem;
 }
 
-.info-value {
-    padding: 12px 16px;
-    background: #f8f9fa;
-    border-radius: 8px;
-    border: 2px solid transparent;
-    transition: all 0.3s ease;
-    min-height: 20px;
-    display: flex;
-    align-items: center;
+.info-value { 
+    padding: 12px 16px; 
+    background: #f8f9fb; 
+    border-radius: 10px; 
+    border: 1px solid #eef0f6; 
+    transition: all 0.3s ease; 
+    min-height: 20px; 
+    display: flex; 
+    align-items: center; 
+    color: var(--text-color); 
 }
 
-.info-input {
-    padding: 12px 16px;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    font-family: 'Poppins', sans-serif;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-    background: var(--light-color);
+.info-input { 
+    padding: 12px 16px; 
+    border: 1.5px solid #e1e4ec; 
+    border-radius: 10px; 
+    font-family: 'Poppins', sans-serif; 
+    font-size: 1rem; 
+    transition: all 0.2s ease; 
+    background: #ffffff; 
+    color: var(--text-color); 
 }
-
-.info-input:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.1);
+.info-input::placeholder { 
+    color: #98a1b3; 
+}
+.info-input:focus { 
+    outline: none; 
+    border-color: var(--primary-color); 
+    box-shadow: 0 0 0 3px rgba(106,17,203,0.12); 
+    background: #ffffff; 
 }
 
 .settings-grid {
@@ -201,49 +210,49 @@
     gap: 1.5rem;
 }
 
-.setting-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1.5rem;
-    background: #f8f9fa;
-    border-radius: 12px;
-    transition: all 0.3s ease;
+.setting-item { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    padding: 1.25rem 1.5rem; 
+    background: #f8f9fb; 
+    border: 1px solid #eef0f6; 
+    border-radius: 12px; 
+    transition: all 0.3s ease; 
+    color: var(--text-color); 
+}
+.setting-item:hover { 
+    background: #f0f2f7; 
+    transform: translateY(-2px); 
 }
 
-.setting-item:hover {
-    background: #f0f2f5;
-    transform: translateY(-2px);
+.setting-info h3 { 
+    font-size: 1rem; 
+    font-weight: 700; 
+    color: var(--text-color); 
+    margin: 0 0 0.25rem 0; 
+}
+.setting-info p { 
+    font-size: 0.85rem; 
+    color: #667085; 
+    margin: 0; 
 }
 
-.setting-info h3 {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--text-color);
-    margin: 0 0 0.25rem 0;
+.setting-btn { 
+    background: var(--brand-gradient); 
+    color: white; 
+    border: none; 
+    border-radius: 10px; 
+    padding: 10px 16px; 
+    font-size: 0.9rem; 
+    font-weight: 600; 
+    cursor: pointer; 
+    transition: all 0.2s ease; 
+    box-shadow: 0 8px 20px rgba(37,117,252,0.2); 
 }
-
-.setting-info p {
-    font-size: 0.9rem;
-    color: #666;
-    margin: 0;
-}
-
-.setting-btn {
-    background: var(--primary-color);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 8px 16px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.setting-btn:hover {
-    background: var(--primary-dark);
-    transform: translateY(-1px);
+.setting-btn:hover { 
+    transform: translateY(-1px); 
+    box-shadow: 0 12px 24px rgba(37,117,252,0.35); 
 }
 
 .setting-btn.secondary {
@@ -254,20 +263,21 @@
     background: #5a6268;
 }
 
-.setting-select {
-    padding: 8px 12px;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    font-family: 'Poppins', sans-serif;
-    font-size: 0.9rem;
-    background: var(--light-color);
-    cursor: pointer;
-    transition: border-color 0.3s ease;
+.setting-select { 
+    padding: 10px 12px; 
+    border: 1.5px solid #e1e4ec; 
+    border-radius: 10px; 
+    font-family: 'Poppins', sans-serif; 
+    font-size: 0.9rem; 
+    background: #ffffff; 
+    color: var(--text-color); 
+    cursor: pointer; 
+    transition: box-shadow 0.2s ease, border-color 0.2s ease; 
 }
-
-.setting-select:focus {
-    outline: none;
-    border-color: var(--primary-color);
+.setting-select:focus { 
+    outline: none; 
+    border-color: var(--primary-color); 
+    box-shadow: 0 0 0 3px rgba(106,17,203,0.12); 
 }
 
 /* Toggle Switch */
@@ -323,14 +333,7 @@ input:checked + .slider:before {
     gap: 1.5rem;
 }
 
-.progress-card {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    padding: 1.5rem;
-    border-radius: 16px;
-    text-align: center;
-    transition: all 0.3s ease;
-}
+.progress-card { background: linear-gradient(135deg, #7699ff 0%, #a88bff 100%); color: white; padding: 1.5rem; border-radius: 16px; text-align: center; transition: all 0.3s ease; box-shadow: 0 12px 24px rgba(0,0,0,0.12); }
 
 .progress-card:hover {
     transform: translateY(-5px);

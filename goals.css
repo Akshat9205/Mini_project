@@ -52,8 +52,8 @@
 }
 .goals-page {
             min-height: 100vh;
-            background: linear-gradient(135deg, var(--gray-color) 0%, #e8e8f0 100%);
-            padding: 80px 0 40px;
+            background: linear-gradient(180deg, #f8fafc 0%, #eef2f9 100%);
+            padding: 100px 0 60px;
         }
 
         .goals-container {
@@ -88,10 +88,12 @@
         }
 
         .goals-form-section {
-            background: var(--light-color);
-            padding: 40px;
+            background: #ffffff;
+            border: 1px solid #eef0f6;
+            padding: 36px;
             border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+            color: var(--text-color);
         }
 
         .goals-form-section h2 {
@@ -117,13 +119,15 @@
         .form-group select,
         .form-group textarea {
             width: 100%;
-            padding: 15px;
-            border: 2px solid #e1e1e1;
+            padding: 14px 16px;
+            border: 1.5px solid #e1e4ec;
             border-radius: 12px;
             font-size: 1rem;
             font-family: 'Poppins', sans-serif;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             box-sizing: border-box;
+            background: #ffffff;
+            color: var(--text-color);
         }
 
         .form-group input:focus,
@@ -131,7 +135,8 @@
         .form-group textarea:focus {
             outline: none;
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.1);
+            box-shadow: 0 0 0 3px rgba(106,17,203,0.12);
+            background: #ffffff;
         }
 
         .form-group textarea {
@@ -148,21 +153,23 @@
         .difficulty-option {
             flex: 1;
             padding: 12px;
-            border: 2px solid #e1e1e1;
+            border: 1.5px solid #e1e4ec;
             border-radius: 8px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
-            background: var(--light-color);
+            background: #ffffff;
+            color: var(--text-color);
         }
 
         .difficulty-option:hover {
             border-color: var(--primary-color);
+            background: rgba(106,17,203,0.05);
         }
 
         .difficulty-option.selected {
             border-color: var(--primary-color);
-            background: rgba(106, 17, 203, 0.1);
+            background: rgba(106,17,203,0.08);
             color: var(--primary-color);
             font-weight: 600;
         }
@@ -173,11 +180,12 @@
             border-radius: 8px;
             text-align: center;
             margin-top: 10px;
+            color: var(--text-color);
         }
 
         .xp-preview .xp-amount {
             font-size: 1.5rem;
-            font-weight: 700;
+            font-weight: 800;
             color: var(--primary-color);
         }
 
@@ -205,10 +213,12 @@
         }
 
         .goals-preview-section {
-            background: var(--light-color);
-            padding: 40px;
+            background: #ffffff;
+            border: 1px solid #eef0f6;
+            padding: 36px;
             border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+            color: var(--text-color);
         }
 
         .goals-preview-section h2 {
@@ -271,6 +281,7 @@
             border-radius: 8px;
             margin-bottom: 10px;
             border-left: 4px solid var(--primary-color);
+            color: var(--text-color);
         }
 
         .goal-item.completed {
@@ -294,8 +305,8 @@
         }
 
         .goal-xp {
-            background: var(--primary-color);
-            color: var(--light-color);
+            background: var(--brand-gradient);
+            color: #fff;
             padding: 5px 10px;
             border-radius: 15px;
             font-size: 0.8rem;
@@ -315,6 +326,7 @@
             border-radius: 12px;
             text-align: center;
             transition: transform 0.3s ease;
+            color: var(--text-color);
         }
 
         .stat-card:hover {
@@ -323,15 +335,15 @@
 
         .stat-number {
             font-size: 2rem;
-            font-weight: 700;
+            font-weight: 800;
             color: var(--primary-color);
             margin-bottom: 5px;
         }
 
         .stat-label {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: #666;
-            font-weight: 500;
+            font-weight: 600;
         }
 
         .quick-tips {

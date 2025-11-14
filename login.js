@@ -8,6 +8,13 @@ function initLoginPage() {
     setupEventListeners();
 }
 
+// Password strength helper
+function isStrongPassword(pwd) {
+    // At least 8 characters, one lowercase, one uppercase, one number, one special character
+    const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s]).{8,}$/;
+    return re.test(pwd || '');
+}
+
 // Check if user is already logged in
 function checkAuthState() {
     const userData = localStorage.getItem('skillup_user');
@@ -59,6 +66,17 @@ function setupEventListeners() {
             }
         });
     });
+
+    // Password visibility toggles
+    document.querySelectorAll('.toggle-password').forEach(t => {
+        t.addEventListener('click', () => {
+            const targetId = t.getAttribute('data-target');
+            const input = document.getElementById(targetId);
+            if (!input) return;
+            input.type = (input.type === 'password') ? 'text' : 'password';
+            t.setAttribute('aria-label', input.type === 'password' ? 'Show password' : 'Hide password');
+        });
+    });
 }
 
 // Show login form
@@ -95,6 +113,12 @@ async function handleLogin(e) {
 
     const email = document.getElementById('login-email').value.trim().toLowerCase();
     const password = document.getElementById('login-password').value.trim();
+
+    // Strong password enforcement
+    if (!isStrongPassword(password)) {
+        showMessage('login', 'Please enter a strong password (8+ chars, uppercase, lowercase, number, symbol).', 'error');
+        return;
+    }
 
     // Clear previous messages
     showMessage('login', 'Logging in...', 'info');
@@ -133,6 +157,11 @@ async function handleSignup(e) {
 
     if (password.length < 6) {
         showMessage('signup', 'Password must be at least 6 characters long', 'error');
+        return;
+    }
+
+    if (!isStrongPassword(password)) {
+        showMessage('signup', 'Please use a strong password (8+ chars, uppercase, lowercase, number, symbol).', 'error');
         return;
     }
 
