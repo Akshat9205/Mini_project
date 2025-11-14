@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillUp Tracker - Gamify Your Learning Journey</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">SkillUp</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#ai">AI Power</a></li>
+                <li><a href="#gamification">Gamification</a></li>
+                <li><a href="#impact">Impact</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle">👤</a>
+                    <div class="dropdown-menu">
+                        <a href="login.html" class="dropdown-item" id="login-btn">🔐 Login</a>
+                        <a href="goals.html" class="dropdown-item">🎯 Set Goal</a>
+                        <a href="profile.html" class="dropdown-item">👤 My Profile</a>
+                        <a href="#" class="dropdown-item" id="dashboard-btn">📊 Dashboard</a>
+                        <a href="#" class="dropdown-item" id="logout-btn">🚪 Logout</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Track. Learn. Level Up Your Skills.</h1>
+                <p>Turn your daily learning goals into a fun, gamified journey — with AI-powered progress tracking.</p>
+                <div class="hero-buttons">
+                    <a href="goals.html" class="btn btn-primary">Get Started</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem" id="problem">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">The Challenge Students Face</h2>
+            </div>
+            <div class="problem-content">
+                <div class="problem-text">
+                    <h3>Why We Built This</h3>
+                    <p>In today’s world, it has become a major challenge for students to consistently improve their skills. Many want to learn competitive programming but struggle to stay motivated for daily practice.</p> 
+                    <p>They set goals, but tracking them and maintaining motivation becomes difficult. Traditional to-do lists often feel boring and fail to keep students engaged.</p> 
+                    <p>The result? Goals get started but remain incomplete, leading to lost progress and demotivation.</p>
+                </div>
+                <div class="problem-visual">
+                    <div style="font-size: 8rem; opacity: 0.3;">😩</div>
+                    <p style="font-style: italic; color: #666;">The struggle is real...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="solution" id="features">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Our Solution – Skill Progress Tracker</h2>
+                <p class="section-subtitle">
+                A platform where students can set their learning goals, earn XP points, unlock badges, and track their rank on the leaderboard.
+                </p>
+            </div>
+            <div class="solution-content">
+                <div class="solution-text">
+                    <h3>Transform Learning into a Game</h3>
+                    <p>Our platform makes skill development addictive by combining learning with gamification. Set goals, earn rewards, and watch yourself grow like never before.</p>
+
+                    <div class="features-grid">
+                        <div class="feature-item">
+                            <span class="feature-icon">🎯</span>
+                            <span>Set Goals</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">⚡</span>
+                            <span>Earn XP</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">🏅</span>
+                            <span>Unlock Badges</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">📈</span>
+                            <span>Track Progress</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="solution-visual">
+                    <div style="font-size: 10rem; opacity: 0.5;">🚀</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Features Section -->
+    <section class="ai-features" id="ai">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title" style="color: white;">Powered by AI for Smarter Learning</h2>
+                <p class="section-subtitle" style="color: rgba(255,255,255,0.9);">What Makes It Different</p>
+            </div>
+            <div class="ai-content">
+                <div class="ai-grid">
+                    <div class="ai-card">
+                        <div class="ai-icon">🧠</div>
+                        <h3>Smart Recommendations</h3>
+                        <p>AI recommends new goals based on your past activity and learning patterns</p>
+                    </div>
+                    <div class="ai-card">
+                        <div class="ai-icon">🔔</div>
+                        <h3>Predictive Reminders</h3>
+                        <p>Predicts streak breaks and sends timely reminders to keep you motivated</p>
+                    </div>
+                    <div class="ai-card">
+                        <div class="ai-icon">📊</div>
+                        <h3>Adaptive XP System</h3>
+                        <p>AI adjusts XP rewards based on task difficulty for fair progression</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gamification Section -->
+    <section class="gamification" id="gamification">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Learn Like a Game</h2>
+                <p class="gami-quote">Earn XP. Maintain streaks. Climb the leaderboard. Make learning addictive — in a good way!</p>
+            </div>
+            <div class="gami-previews">
+                <div class="preview-card">
+                    <h4>XP Progress Bar</h4>
+                    <div class="xp-bar">
+                        <div class="xp-fill"></div>
+                    </div>
+                    <p>Visual progress tracking with animated XP bars</p>
+                </div>
+                <div class="preview-card">
+                    <h4>🔥 Daily Streaks</h4>
+                    <div style="font-size: 3rem; margin: 1rem 0;">🔥 7 Days</div>
+                    <p>Build momentum with daily streak counters</p>
+                </div>
+                <div class="preview-card">
+                    <h4>🏆 Leaderboard</h4>
+                    <div style="background: var(--gray-color); padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                            <span>🥇 You</span><span>1,250 XP</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                            <span>🥈 Alex</span><span>980 XP</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>🥉 Sam</span><span>850 XP</span>
+                        </div>
+                    </div>
+                    <p>Compete with peers and climb the ranks</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impact Section -->
+    <section class="impact" id="impact">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title" style="color: white;">Why It Matters</h2>
+            </div>
+            <div class="impact-content">
+                <div class="impact-text">
+                    <p style="font-size: 1.3rem; margin-bottom: 2rem;">Students will track skills like a game — turning boring learning into fun growth. It's like Duolingo for Skill Development.</p>
+                </div>
+                <div class="before-after">
+                    <div class="before">
+                        <h4>Before</h4>
+                        <div style="font-size: 4rem; margin-bottom: 1rem;">😞</div>
+                        <p>Unmotivated student with unfinished goals</p>
+                    </div>
+                    <div class="after">
+                        <h4>After</h4>
+                        <div style="font-size: 4rem; margin-bottom: 1rem;">🚀</div>
+                        <p>Motivated learner leveling up daily</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action Section -->
+    <section class="cta" id="cta">
+        <div class="container">
+            <h2>Ready to Level Up Your Skills?</h2>
+            <p>Join thousands of students who are already turning their learning goals into achievements.</p>
+            <div class="cta-buttons">
+                <a href="goals.html" class="btn btn-primary">Join Beta</a>
+                <a href="goals.html" class="btn btn-secondary">Try the Demo</a>
+                <a href="#" class="btn btn-secondary">Connect with Team</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>SkillUp Tracker</h3>
+                    <p>Transform your learning journey with gamification and AI-powered progress tracking.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Features</h3>
+                    <p>Goal Setting • XP System • AI Recommendations • Leaderboards • Progress Analytics</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Connect</h3>
+                    <div class="social-links">
+                        <a href="#">📧</a>
+                        <a href="#">🐦</a>
+                        <a href="#">💼</a>
+                        <a href="#">📱</a>
+                    </div>
+                </div>
+            </div>
+            <div style="border-top: 1px solid rgba(255,255,255,0.2); padding-top: 20px; margin-top: 20px;">
+                <p>Built with ❤️ by Team SkillUp for PM Accelerator Mini Project 2025.</p>
+                <p>&copy; 2025 SkillUp Tracker. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div id="login-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <button class="modal-close" id="login-modal-close" onclick="closeLoginModal()">&times;</button>
+            <h2>🔐 Welcome Back!</h2>
+            <p>Login to continue your skill journey</p>
+
+            <div id="login-message"></div>
+
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" name="login-email" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" name="login-password" placeholder="Enter your password" required>
+                </div>
+
+                <div class="form-options">
+                    <label class="remember-me">
+                        <input type="checkbox" id="remember-me" name="remember-me">
+                        Remember me
+                    </label>
+                    <a href="#">Forgot Password?</a>
+                </div>
+
+                <div class="form-options" style="justify-content: center; margin-top: 20px;">
+                    <p>Don't have an account? <a href="#" onclick="switchToSignup()">Sign up here</a></p>
+                </div>
+
+                <div class="modal-buttons">
+                    <button type="button" class="btn-secondary" onclick="closeLoginModal()">Cancel</button>
+                    <button type="submit" class="btn-primary">Login</button>
+                </div>
+            </form>
+
+            <div class="social-login">
+                <p>Or continue with</p>
+                <div class="social-buttons">
+                    <button class="social-btn google" onclick="socialLogin('google')">
+                        <svg class="social-icon" viewBox="0 0 24 24" width="18" height="18">
+                            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                        </svg>
+                        Continue with Google
+                    </button>
+                    <button class="social-btn facebook" onclick="socialLogin('facebook')">
+                        <svg class="social-icon" viewBox="0 0 24 24" width="18" height="18">
+                            <path fill="#1877F2" d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                        </svg>
+                        Continue with Facebook
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div id="signup-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <button class="modal-close" id="signup-modal-close" onclick="closeSignupModal()">&times;</button>
+            <h2>🚀 Join SkillUp!</h2>
+            <p>Create your account to start your learning journey</p>
+
+            <div id="signup-message"></div>
+
+            <form id="signup-form">
+                <div class="form-group">
+                    <label for="signup-name">Full Name</label>
+                    <input type="text" id="signup-name" name="signup-name" placeholder="Enter your full name" required>
+                </div>
+                <div class="form-group">
+                    <label for="signup-email">Email</label>
+                    <input type="email" id="signup-email" name="signup-email" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="signup-password">Password</label>
+                    <input type="password" id="signup-password" name="signup-password" placeholder="Create a password (min 6 characters)" required>
+                </div>
+                <div class="form-group">
+                    <label for="signup-confirm-password">Confirm Password</label>
+                    <input type="password" id="signup-confirm-password" name="signup-confirm-password" placeholder="Confirm your password" required>
+                </div>
+
+                <div class="form-options">
+                    <label class="remember-me">
+                        <input type="checkbox" id="terms-agree" name="terms-agree" required>
+                        I agree to the <a href="#">Terms & Conditions</a>
+                    </label>
+                </div>
+
+                <div class="modal-buttons">
+                    <button type="button" class="btn-secondary" onclick="closeSignupModal()">Cancel</button>
+                    <button type="submit" class="btn-primary">Create Account</button>
+                </div>
+            </form>
+
+            <div class="social-login">
+                <p>Or continue with</p>
+                <div class="social-buttons">
+                    <button class="social-btn google" onclick="socialSignup('google')">
+                        <svg class="social-icon" viewBox="0 0 24 24" width="18" height="18">
+                            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                        </svg>
+                        Continue with Google
+                    </button>
+                    <button class="social-btn facebook" onclick="socialSignup('facebook')">
+                        <svg class="social-icon" viewBox="0 0 24 24" width="18" height="18">
+                            <path fill="#1877F2" d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                        </svg>
+                        Continue with Facebook
+                    </button>
+                </div>
+            </div>
+
+            <div class="form-options" style="justify-content: center; margin-top: 20px;">
+                <p>Already have an account? <a href="#" onclick="switchToLogin()">Login here</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal (if needed) -->
+    <div id="login-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <button class="modal-close" id="login-modal-close" onclick="closeLoginModal()">&times;</button>
+            <h2>🔐 Welcome Back!</h2>
+            <p>Login to continue your skill journey</p>
+
+            <div id="login-message"></div>
+
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="login-email">Email Address</label>
+                    <input type="email" id="login-email" name="login-email" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" name="login-password" placeholder="Enter your password" required>
+                </div>
+
+                <div class="form-options">
+                    <label class="remember-me">
+                        <input type="checkbox" id="remember-me" name="remember-me">
+                        Remember me
+                    </label>
+                    <a href="#">Forgot Password?</a>
+                </div>
+
+                <div class="modal-buttons">
+                    <button type="button" class="btn-secondary" onclick="closeLoginModal()">Cancel</button>
+                    <button type="submit" class="btn-primary">Login</button>
+                </div>
+            </form>
+
+            <div class="social-login">
+                <p>Or continue with</p>
+                <div class="social-buttons">
+                    <button class="social-btn google" onclick="socialLogin('google')">
+                        <svg class="social-icon" viewBox="0 0 24 24" width="18" height="18">
+                            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                        </svg>
+                        Continue with Google
+                    </button>
+                    <button class="social-btn facebook" onclick="socialLogin('facebook')">
+                        <svg class="social-icon" viewBox="0 0 24 24" width="18" height="18">
+                            <path fill="#1877F2" d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                        </svg>
+                        Continue with Facebook
+                    </button>
+                </div>
+            </div>
+
+            <div class="form-options" style="justify-content: center; margin-top: 20px;">
+                <p>Don't have an account? <a href="login.html">Sign up here</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

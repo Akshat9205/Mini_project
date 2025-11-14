@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Set New Goal - SkillUp Tracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="goals.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">SkillUp</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#features">Features</a></li>
+                <li><a href="index.html#ai">AI Power</a></li>
+                <li><a href="index.html#gamification">Gamification</a></li>
+                <li><a href="index.html#impact">Impact</a></li>
+                <li class="dropdown">
+                    <a href="profile.html" class="dropdown-toggle">👤 Profile</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Goals Page Content -->
+    <div class="goals-page">
+        <div class="goals-container">
+            <div class="goals-header">
+                <h1>🎯 Set Your Learning Goal</h1>
+                <p>Define your objectives and start your journey towards mastery. Choose your skill, set your target, and earn XP along the way!</p>
+            </div>
+
+            <div class="goals-content">
+                <!-- Goals Form Section -->
+                <div class="goals-form-section">
+                    <h2>Create New Goal</h2>
+
+                    <div id="goal-message"></div>
+
+                    <form id="goal-form">
+                        <div class="form-group">
+                            <label for="goal-title">Goal Title *</label>
+                            <input type="text" id="goal-title" name="goal-title" placeholder="e.g., Complete 50 LeetCode Problems" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Skill Category *</label>
+                            <div class="goals-categories">
+                                <div class="category-card" data-category="coding">
+                                    <div class="category-icon">💻</div>
+                                    <div>Coding & DSA</div>
+                                </div>
+                                <div class="category-card" data-category="communication">
+                                    <div class="category-icon">🗣️</div>
+                                    <div>Communication</div>
+                                </div>
+                                <div class="category-card" data-category="design">
+                                    <div class="category-icon">🎨</div>
+                                    <div>Design & UX</div>
+                                </div>
+                                <div class="category-card" data-category="finance">
+                                    <div class="category-icon">💰</div>
+                                    <div>Finance</div>
+                                </div>
+                                <div class="category-card" data-category="writing">
+                                    <div class="category-icon">✍️</div>
+                                    <div>Writing</div>
+                                </div>
+                                <div class="category-card" data-category="other">
+                                    <div class="category-icon">🚀</div>
+                                    <div>Other</div>
+                                </div>
+                            </div>
+                            <input type="hidden" id="goal-category" name="goal-category" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="goal-description">Description</label>
+                            <textarea id="goal-description" name="goal-description" placeholder="Describe your goal in detail. What do you want to achieve? What are the steps involved?"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Difficulty Level</label>
+                            <div class="difficulty-selector">
+                                <div class="difficulty-option" data-difficulty="easy">
+                                    <div>😊 Easy</div>
+                                    <small>Beginner friendly</small>
+                                </div>
+                                <div class="difficulty-option" data-difficulty="medium">
+                                    <div>💪 Medium</div>
+                                    <small>Moderate challenge</small>
+                                </div>
+                                <div class="difficulty-option" data-difficulty="hard">
+                                    <div>🔥 Hard</div>
+                                    <small>Advanced level</small>
+                                </div>
+                            </div>
+                            <input type="hidden" id="goal-difficulty" name="goal-difficulty" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="goal-deadline">Target Deadline *</label>
+                            <input type="date" id="goal-deadline" name="goal-deadline" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Expected XP Reward</label>
+                            <div class="xp-preview">
+                                <div class="xp-amount" id="xp-preview">100 XP</div>
+                                <small>Based on difficulty level</small>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn-cancel" onclick="cancelGoal()">Cancel</button>
+                            <button type="submit" class="btn btn-primary">🚀 Set Goal & Start!</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Goals Preview Section -->
+                <div class="goals-preview-section">
+                    <h2>Your Goals Dashboard</h2>
+
+                    <div class="stats-overview">
+                        <div class="stat-card">
+                            <div class="stat-number" id="total-goals">0</div>
+                            <div class="stat-label">Total Goals</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="active-goals">0</div>
+                            <div class="stat-label">Active Goals</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="total-xp">0</div>
+                            <div class="stat-label">Total XP</div>
+                        </div>
+                    </div>
+
+                    <div class="recent-goals">
+                        <h3>📋 Recent Goals</h3>
+                        <div id="recent-goals-list">
+                            <div class="no-goals">
+                                <div style="font-size: 3rem; margin-bottom: 1rem;">🎯</div>
+                                <h4>No goals set yet!</h4>
+                                <p>Ready to start your learning journey? Create your first goal to see it here.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="quick-tips">
+                        <h3>💡 Pro Tips</h3>
+                        <ul>
+                            <li>🎯 Set SMART goals (Specific, Measurable, Achievable, Relevant, Time-bound)</li>
+                            <li>⚡ Break big goals into smaller milestones</li>
+                            <li>🏆 Choose difficulty based on your current skill level</li>
+                            <li>📅 Set realistic deadlines to stay motivated</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="goals.js"></script>
+</body>
+</html>

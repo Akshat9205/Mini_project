@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - SkillUp Tracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="profile.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">SkillUp</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#features">Features</a></li>
+                <li><a href="index.html#ai">AI Power</a></li>
+                <li><a href="index.html#gamification">Gamification</a></li>
+                <li><a href="index.html#impact">Impact</a></li>
+                <li class="dropdown">
+                    <a href="profile.html" class="dropdown-toggle">👤 Profile</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Profile Page -->
+    <div class="profile-page">
+        <div class="profile-container">
+            <!-- Profile Header -->
+            <div class="profile-header">
+                <div class="profile-avatar-section">
+                    <div class="profile-avatar">
+                        <img src="https://via.placeholder.com/120x120/6A11CB/FFFFFF?text=👤" alt="Profile Picture" id="profile-avatar-img">
+                        <button class="avatar-edit-btn" id="avatar-edit-btn" title="Change Photo">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                        <input type="file" id="avatar-input" accept="image/*" style="display: none;">
+                    </div>
+                    <div class="profile-info">
+                        <h1 id="profile-name">Your Name</h1>
+                        <p id="profile-email">your.email@example.com</p>
+                        <div class="profile-stats">
+                            <div class="stat">
+                                <span class="stat-number" id="total-goals">0</span>
+                                <span class="stat-label">Goals</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-number" id="total-xp">0</span>
+                                <span class="stat-label">XP</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-number" id="level">1</span>
+                                <span class="stat-label">Level</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="edit-profile-btn" id="edit-profile-btn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Edit Profile
+                </button>
+            </div>
+
+            <!-- Profile Content -->
+            <div class="profile-content">
+                <!-- Personal Information -->
+                <div class="profile-section">
+                    <h2>📋 Personal Information</h2>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <label>Full Name</label>
+                            <div class="info-value" id="display-name">Your Full Name</div>
+                            <input type="text" class="info-input" id="edit-name" style="display: none;" placeholder="Enter your full name">
+                        </div>
+                        <div class="info-item">
+                            <label>Email Address</label>
+                            <div class="info-value" id="display-email">your.email@example.com</div>
+                            <input type="email" class="info-input" id="edit-email" style="display: none;" placeholder="Enter your email">
+                        </div>
+                        <div class="info-item">
+                            <label>Phone Number</label>
+                            <div class="info-value" id="display-phone">Not provided</div>
+                            <input type="tel" class="info-input" id="edit-phone" style="display: none;" placeholder="Enter your phone number">
+                        </div>
+                        <div class="info-item">
+                            <label>Location</label>
+                            <div class="info-value" id="display-location">Not provided</div>
+                            <input type="text" class="info-input" id="edit-location" style="display: none;" placeholder="Enter your location">
+                        </div>
+                        <div class="info-item">
+                            <label>Bio</label>
+                            <div class="info-value" id="display-bio">No bio added yet</div>
+                            <textarea class="info-input" id="edit-bio" style="display: none;" placeholder="Tell us about yourself" rows="3"></textarea>
+                        </div>
+                        <div class="info-item">
+                            <label>Website</label>
+                            <div class="info-value" id="display-website">Not provided</div>
+                            <input type="url" class="info-input" id="edit-website" style="display: none;" placeholder="https://yourwebsite.com">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Account Settings -->
+                <div class="profile-section">
+                    <h2>⚙️ Account Settings</h2>
+                    <div class="settings-grid">
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h3>Change Password</h3>
+                                <p>Update your account password</p>
+                            </div>
+                            <button class="setting-btn" id="change-password-btn">Change</button>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h3>Email Notifications</h3>
+                                <p>Manage your email preferences</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="email-notifications" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h3>Profile Visibility</h3>
+                                <p>Control who can see your profile</p>
+                            </div>
+                            <select class="setting-select" id="profile-visibility">
+                                <option value="public">Public</option>
+                                <option value="private">Private</option>
+                                <option value="friends">Friends Only</option>
+                            </select>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h3>Two-Factor Authentication</h3>
+                                <p>Add extra security to your account</p>
+                            </div>
+                            <button class="setting-btn secondary" id="two-factor-btn">Enable</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Learning Progress -->
+                <div class="profile-section">
+                    <h2>📊 Learning Progress</h2>
+                    <div class="progress-grid">
+                        <div class="progress-card">
+                            <div class="progress-header">
+                                <h3>🎯 Goals Completed</h3>
+                                <span class="progress-number" id="completed-goals">0</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="goals-progress" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <div class="progress-card">
+                            <div class="progress-header">
+                                <h3>🏆 Total XP Earned</h3>
+                                <span class="progress-number" id="earned-xp">0</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill xp" id="xp-progress" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <div class="progress-card">
+                            <div class="progress-header">
+                                <h3>🔥 Current Streak</h3>
+                                <span class="progress-number" id="current-streak">0</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill streak" id="streak-progress" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="profile-section">
+                    <h2>📝 Recent Activity</h2>
+                    <div class="activity-list" id="recent-activity">
+                        <div class="no-activity">
+                            <div style="font-size: 3rem; margin-bottom: 1rem;">📋</div>
+                            <h4>No recent activity</h4>
+                            <p>Start setting goals to see your progress here!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="profile-actions">
+                    <button class="btn btn-primary" onclick="saveProfile()">💾 Save Changes</button>
+                    <button class="btn btn-secondary" onclick="cancelEdit()">❌ Cancel</button>
+                    <button class="btn btn-danger" onclick="deleteAccount()">🗑️ Delete Account</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Change Password Modal -->
+    <div id="password-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <button class="modal-close" id="password-modal-close">&times;</button>
+            <h2>🔐 Change Password</h2>
+            <p>Enter your current password and choose a new one</p>
+
+            <div id="password-message"></div>
+
+            <form id="password-form">
+                <div class="form-group">
+                    <label for="current-password">Current Password</label>
+                    <input type="password" id="current-password" name="current-password" placeholder="Enter current password" required>
+                </div>
+                <div class="form-group">
+                    <label for="new-password">New Password</label>
+                    <input type="password" id="new-password" name="new-password" placeholder="Enter new password (min 6 characters)" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirm-new-password">Confirm New Password</label>
+                    <input type="password" id="confirm-new-password" name="confirm-new-password" placeholder="Confirm new password" required>
+                </div>
+
+                <div class="modal-buttons">
+                    <button type="button" class="btn-secondary" onclick="closePasswordModal()">Cancel</button>
+                    <button type="submit" class="btn-primary">Update Password</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="profile.js"></script>
+</body>
+</html>
