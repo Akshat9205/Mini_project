@@ -9,17 +9,31 @@ function initProfile() {
     loadUserProgress();
 }
 
+// Helper to safely get/set current user
+function getCurrentUser() {
+    return window.currentUser || JSON.parse(localStorage.getItem('skillup_user') || 'null');
+}
+function setCurrentUser(user) {
+    window.currentUser = user;
+    localStorage.setItem('skillup_user', JSON.stringify(user));
+}
+
 // Check authentication state
 function checkAuthState() {
     const userData = localStorage.getItem('skillup_user');
     if (userData) {
         window.currentUser = JSON.parse(userData);
-        updateNavbarForLoggedInUser();
+        updateNavbarForLoggedInUser && updateNavbarForLoggedInUser();
         updateProfileDisplay();
     } else {
         // Redirect to login if not authenticated
         window.location.href = 'login.html';
     }
+}
+
+// Provide missing function used in init
+function loadUserProfile() {
+    updateProfileDisplay();
 }
 
 // Logout function
@@ -53,14 +67,19 @@ function closeDropdownOnOutsideClick(e) {
 
 // Update profile display with user data
 function updateProfileDisplay() {
-    if (currentUser) {
-        document.getElementById('profile-name').textContent = currentUser.name || 'Your Name';
-        document.getElementById('profile-email').textContent = currentUser.email || 'your.email@example.com';
+    const cu = getCurrentUser();
+    if (cu) {
+        document.getElementById('profile-name').textContent = cu.name || 'Your Name';
+        // Header subtitle should show bio if available; otherwise email
+        const profileData = JSON.parse(localStorage.getItem('skillup_profile') || '{}');
+        const subtitle = (profileData.bio && profileData.bio.trim()) ? profileData.bio.trim() : (cu.email || 'your.email@example.com');
+        const subtitleEl = document.getElementById('profile-email');
+        if (subtitleEl) subtitleEl.textContent = subtitle;
 
         // Update avatar if available
         const avatarImg = document.getElementById('profile-avatar-img');
-        if (currentUser && currentUser.avatar) {
-            avatarImg.src = currentUser.avatar;
+        if (cu && cu.avatar) {
+            avatarImg.src = cu.avatar;
         }
 
         // Load profile data
@@ -71,10 +90,11 @@ function updateProfileDisplay() {
 // Load profile data from localStorage
 function loadProfileData() {
     const profileData = JSON.parse(localStorage.getItem('skillup_profile') || '{}');
+    const cu = getCurrentUser() || {};
 
     // Personal Information
-    document.getElementById('display-name').textContent = profileData.name || currentUser.name || 'Your Full Name';
-    document.getElementById('display-email').textContent = profileData.email || currentUser.email || 'your.email@example.com';
+    document.getElementById('display-name').textContent = profileData.name || cu.name || 'Your Full Name';
+    document.getElementById('display-email').textContent = profileData.email || cu.email || 'your.email@example.com';
     document.getElementById('display-phone').textContent = profileData.phone || 'Not provided';
     document.getElementById('display-location').textContent = profileData.location || 'Not provided';
     document.getElementById('display-bio').textContent = profileData.bio || 'No bio added yet';
@@ -89,8 +109,8 @@ function loadProfileData() {
     }
 
     // Fill edit inputs
-    document.getElementById('edit-name').value = profileData.name || currentUser.name || '';
-    document.getElementById('edit-email').value = profileData.email || currentUser.email || '';
+    document.getElementById('edit-name').value = profileData.name || cu.name || '';
+    document.getElementById('edit-email').value = profileData.email || cu.email || '';
     document.getElementById('edit-phone').value = profileData.phone || '';
     document.getElementById('edit-location').value = profileData.location || '';
     document.getElementById('edit-bio').value = profileData.bio || '';
@@ -99,8 +119,9 @@ function loadProfileData() {
 
 // Load user progress and stats
 function loadUserProgress() {
+    const cu = getCurrentUser();
     const goalsData = JSON.parse(localStorage.getItem('skillup_goals') || '[]');
-    const userGoals = goalsData.filter(goal => goal.userId === currentUser.id);
+    const userGoals = cu ? goalsData.filter(goal => goal.userId === cu.id) : [];
 
     // Calculate stats
     const totalGoals = userGoals.length;
@@ -206,6 +227,21 @@ function setupEventListeners() {
 
     // Close dropdown when clicking outside
     document.addEventListener('click', closeDropdownOnOutsideClick);
+
+    // Auto-refresh progress and recent activity when goals change in another tab/page
+    window.addEventListener('storage', (e) => {
+        if (e.key === 'skillup_goals') {
+            loadUserProgress();
+        }
+    });
+
+    // Refresh when user returns to the tab or window focus
+    window.addEventListener('focus', () => {
+        loadUserProgress();
+    });
+    document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) loadUserProgress();
+    });
 }
 
 // Toggle edit mode
@@ -266,8 +302,17 @@ function handleAvatarUpload(e) {
             avatarImg.src = e.target.result;
 
             // Save avatar to user data
-            window.currentUser.avatar = e.target.result;
-            localStorage.setItem('skillup_user', JSON.stringify(window.currentUser));
+            const cu = getCurrentUser() || {};
+            cu.avatar = e.target.result;
+            setCurrentUser(cu);
+
+            // Also persist in skillup_users list
+            const users = JSON.parse(localStorage.getItem('skillup_users') || '[]');
+            const idx = users.findIndex(u => u.id === cu.id);
+            if (idx > -1) {
+                users[idx].avatar = cu.avatar;
+                localStorage.setItem('skillup_users', JSON.stringify(users));
+            }
         };
         reader.readAsDataURL(file);
     }
@@ -287,9 +332,19 @@ function saveProfile() {
     };
 
     // Update current user data
-    window.currentUser.name = profileData.name;
-    window.currentUser.email = profileData.email;
-    localStorage.setItem('skillup_user', JSON.stringify(window.currentUser));
+    const cu = getCurrentUser() || {};
+    cu.name = profileData.name;
+    cu.email = profileData.email;
+    setCurrentUser(cu);
+
+    // Update in users list
+    const users = JSON.parse(localStorage.getItem('skillup_users') || '[]');
+    const idx = users.findIndex(u => u.id === cu.id);
+    if (idx > -1) {
+        users[idx].name = cu.name;
+        users[idx].email = cu.email;
+        localStorage.setItem('skillup_users', JSON.stringify(users));
+    }
 
     // Save profile data
     localStorage.setItem('skillup_profile', JSON.stringify(profileData));
@@ -354,9 +409,18 @@ function handlePasswordChange(e) {
     }
 
     // In a real app, verify current password with backend
-    // For demo, just update the password
-    currentUser.password = newPassword;
-    localStorage.setItem('skillup_user', JSON.stringify(currentUser));
+    // For demo, just update the password (if matches user in list)
+    const cu = getCurrentUser();
+    if (cu) {
+        cu.password = newPassword;
+        setCurrentUser(cu);
+        const users = JSON.parse(localStorage.getItem('skillup_users') || '[]');
+        const idx = users.findIndex(u => u.id === cu.id);
+        if (idx > -1) {
+            users[idx].password = newPassword;
+            localStorage.setItem('skillup_users', JSON.stringify(users));
+        }
+    }
 
     closePasswordModal();
     showMessage('Password updated successfully!', 'success');

@@ -196,12 +196,144 @@ function closeDropdownOnOutsideClick(e) {
 
 // Event listeners
 document.addEventListener('DOMContentLoaded', () => {
+    // Splash overlay handling
+    const splash = document.getElementById('splash');
+    if (splash) {
+        document.body.classList.add('no-scroll');
+
+        const finishSplash = () => {
+            if (!splash.classList.contains('done')) {
+                splash.classList.add('done');
+                splash.style.display = 'none';
+                document.body.classList.remove('no-scroll');
+            }
+        };
+
+        splash.addEventListener('animationend', (e) => {
+            if (e.animationName === 'splashFade') {
+                finishSplash();
+            }
+        });
+
+        // Fallback in case animationend doesn't fire
+        setTimeout(finishSplash, 3200);
+    }
+
     // Check authentication state
     checkAuthState();
+
+    // Theme: initialize from localStorage
+    const applyTheme = (theme) => {
+        if (theme === 'dark') {
+            document.body.setAttribute('data-theme', 'dark');
+        } else {
+            document.body.removeAttribute('data-theme');
+        }
+        // Update toggle icon on all buttons
+        document.querySelectorAll('.theme-toggle').forEach(btn => {
+            btn.textContent = document.body.getAttribute('data-theme') === 'dark' ? '☀️' : '🌙';
+            btn.setAttribute('aria-label', document.body.getAttribute('data-theme') === 'dark' ? 'Toggle light mode' : 'Toggle dark mode');
+        });
+    };
+    applyTheme(localStorage.getItem('skillup_theme'));
+    // Theme toggle listeners (support multiple pages)
+    document.querySelectorAll('.theme-toggle').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const isDark = document.body.getAttribute('data-theme') === 'dark';
+            const next = isDark ? 'light' : 'dark';
+            localStorage.setItem('skillup_theme', next);
+            applyTheme(next);
+        });
+    });
 
     // Dropdown toggle
     const dropdownToggleEl = document.querySelector('.dropdown-toggle');
     if (dropdownToggleEl) dropdownToggleEl.addEventListener('click', toggleDropdown);
+
+    // Mobile nav toggle
+    const navToggle = document.querySelector('.nav-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    if (navToggle && navLinks) {
+        const closeMobileMenu = () => {
+            navLinks.classList.remove('open');
+            navToggle.setAttribute('aria-expanded', 'false');
+        };
+
+        navToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isOpen = navLinks.classList.toggle('open');
+            navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        });
+
+        // Close menu when clicking a link
+        navLinks.querySelectorAll('a').forEach(a => {
+            a.addEventListener('click', () => {
+                closeMobileMenu();
+            });
+        });
+
+        // Close on outside click
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.navbar')) closeMobileMenu();
+        });
+
+        // Close on resize to desktop
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768) closeMobileMenu();
+        });
+    }
+
+    // Signup form handler
+    if (document.getElementById('signup-form')) {
+        document.getElementById('signup-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const name = (document.getElementById('signup-name').value || '').trim();
+            const email = (document.getElementById('signup-email').value || '').trim().toLowerCase();
+            const password = (document.getElementById('signup-password').value || '').trim();
+            const confirm = (document.getElementById('signup-confirm-password').value || '').trim();
+
+            const msgEl = document.getElementById('signup-message');
+            msgEl.innerHTML = '<div class="message" style="background:#e3f2fd;color:#1976d2;border:1px solid #90caf9;">Creating your account...</div>';
+
+            if (!name) {
+                msgEl.innerHTML = '<div class="message error">Please enter your full name.</div>';
+                return;
+            }
+            if (!email || !email.includes('@')) {
+                msgEl.innerHTML = '<div class="message error">Please enter a valid email address.</div>';
+                return;
+            }
+            if (password !== confirm) {
+                msgEl.innerHTML = '<div class="message error">Passwords do not match.</div>';
+                return;
+            }
+            if (!isStrongPassword(password)) {
+                msgEl.innerHTML = '<div class="message error">Please use a strong password (8+ chars, uppercase, lowercase, number, symbol).</div>';
+                return;
+            }
+
+            const result = await signup(name, email, password);
+            if (result.success) {
+                currentUser = result.user;
+                localStorage.setItem('skillup_user', JSON.stringify(currentUser));
+
+                // Initialize profile data with basic fields
+                const initialProfile = {
+                    name: name,
+                    email: email,
+                    emailNotifications: true,
+                    profileVisibility: 'public'
+                };
+                localStorage.setItem('skillup_profile', JSON.stringify(initialProfile));
+
+                // Redirect to profile page
+                window.location.href = 'profile.html';
+            } else {
+                msgEl.innerHTML = `<div class="message error">${result.error || 'Signup failed. Try again.'}</div>`;
+            }
+        });
+    }
 
     // Login button in dropdown
     const loginBtnEl = document.getElementById('login-btn');

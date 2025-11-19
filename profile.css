@@ -3,7 +3,7 @@
 .profile-page {
     min-height: 100vh;
     background: linear-gradient(180deg, #f8fafc 0%, #eef2f9 100%);
-    padding: 2rem 0;
+    padding: 6rem 0 2rem; /* extra top padding to clear fixed navbar */
 }
 
 .profile-container {
@@ -17,7 +17,7 @@
     border: 1px solid #eef0f6;
     border-radius: 22px;
     padding: 2rem;
-    margin-bottom: 2rem;
+    margin: 0 auto 2rem; /* ensure space below and proper centering */
     box-shadow: 0 12px 30px rgba(0,0,0,0.08);
     display: flex;
     justify-content: space-between;

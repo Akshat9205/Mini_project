@@ -8,10 +8,22 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+        <div id="splash">
+            <div class="splash-content">
+                <div class="splash-text">SkillUp</div>
+                <div class="splash-avatar" aria-hidden="true">👨‍💻</div>
+            </div>
+        </div>
     <!-- Navigation -->
     <nav class="navbar">
         <div class="container">
             <div class="logo">SkillUp</div>
+            <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">🌙</button>
+            <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
             <ul class="nav-links">
                 <li><a href="#home">Home</a></li>
                 <li><a href="#features">Features</a></li>
@@ -24,8 +36,6 @@
                         <a href="login.html" class="dropdown-item" id="login-btn">🔐 Login</a>
                         <a href="goals.html" class="dropdown-item">🎯 Set Goal</a>
                         <a href="profile.html" class="dropdown-item">👤 My Profile</a>
-                        <a href="#" class="dropdown-item" id="dashboard-btn">📊 Dashboard</a>
-                        <a href="#" class="dropdown-item" id="logout-btn">🚪 Logout</a>
                     </div>
                 </li>
             </ul>
@@ -37,9 +47,10 @@
         <div class="container">
             <div class="hero-content">
                 <h1>Track. Learn. Level Up Your Skills.</h1>
-                <p>Turn your daily learning goals into a fun, gamified journey — with AI-powered progress tracking.</p>
+                <p class="hero-subtitle">Turn your daily learning goals into a fun, gamified journey — with AI-powered progress tracking.</p>
                 <div class="hero-buttons">
                     <a href="goals.html" class="btn btn-primary">Get Started</a>
+                    <a href="#features" class="btn btn-secondary">Explore Features</a>
                 </div>
             </div>
         </div>
@@ -214,30 +225,44 @@
     </section>
 
     <!-- Footer -->
-    <footer>
+    <footer class="site-footer">
         <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>SkillUp Tracker</h3>
-                    <p>Transform your learning journey with gamification and AI-powered progress tracking.</p>
-                </div>
-                <div class="footer-section">
-                    <h3>Features</h3>
-                    <p>Goal Setting • XP System • AI Recommendations • Leaderboards • Progress Analytics</p>
-                </div>
-                <div class="footer-section">
-                    <h3>Connect</h3>
-                    <div class="social-links">
-                        <a href="#">📧</a>
-                        <a href="#">🐦</a>
-                        <a href="#">💼</a>
-                        <a href="#">📱</a>
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="brand">SkillUp</div>
+                    <p class="brand-desc">Gamify your learning. Track goals, earn rewards, and grow every day.</p>
+                    <div class="footer-social">
+                        <a href="#" aria-label="Email">📧</a>
+                        <a href="#" aria-label="Twitter">🐦</a>
+                        <a href="#" aria-label="LinkedIn">💼</a>
+                        <a href="#" aria-label="Instagram">📸</a>
                     </div>
                 </div>
+                <div class="footer-links">
+                    <h4>Product</h4>
+                    <a href="#features">Features</a>
+                    <a href="#gamification">Gamification</a>
+                    <a href="#ai">AI Power</a>
+                    <a href="#cta">Get Started</a>
+                </div>
+                <div class="footer-links">
+                    <h4>Resources</h4>
+                    <a href="#problem">Why SkillUp</a>
+                    <a href="#impact">Impact</a>
+                    <a href="#">Community</a>
+                    <a href="#">Support</a>
+                </div>
+                <div class="newsletter">
+                    <h4>Stay in the loop</h4>
+                    <p>Get updates on new features and tips.</p>
+                    <form class="newsletter-form" onsubmit="event.preventDefault();">
+                        <input type="email" placeholder="Your email" required>
+                        <button type="submit" class="btn btn-primary">Subscribe</button>
+                    </form>
+                </div>
             </div>
-            <div style="border-top: 1px solid rgba(255,255,255,0.2); padding-top: 20px; margin-top: 20px;">
-                <p>Built with ❤️ by Team SkillUp for PM Accelerator Mini Project 2025.</p>
-                <p>&copy; 2025 SkillUp Tracker. All rights reserved.</p>
+            <div class="footer-bottom">
+                <p>&copy; 2025 SkillUp Tracker • Built with ❤️ by Team SkillUp</p>
             </div>
         </div>
     </footer>

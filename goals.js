@@ -1,7 +1,10 @@
 // Goals Page JavaScript
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize goals data
-    let userGoals = JSON.parse(localStorage.getItem('skillup_goals')) || [];
+    // Helpers for storage
+    const getAllGoals = () => JSON.parse(localStorage.getItem('skillup_goals') || '[]');
+    const setAllGoals = (arr) => localStorage.setItem('skillup_goals', JSON.stringify(arr || []));
+
+    // Initialize derived user goals and stats (per current user)
     let userStats = JSON.parse(localStorage.getItem('userStats')) || {
         totalGoals: 0,
         activeGoals: 0,
@@ -31,6 +34,25 @@ document.addEventListener('DOMContentLoaded', function() {
         setupDifficultySelection();
         updateStatsDisplay();
         renderRecentGoals();
+        renderChart();
+
+        // Reset Goals button
+        const resetBtn = document.getElementById('reset-goals-btn');
+        if (resetBtn) {
+            resetBtn.addEventListener('click', function() {
+                if (!currentUser || !currentUser.id) return;
+                if (!confirm('This will remove all your goals. Continue?')) return;
+
+                const all = getAllGoals();
+                const remaining = all.filter(g => g.userId !== currentUser.id);
+                setAllGoals(remaining);
+                userStats = { totalGoals: 0, activeGoals: 0, totalXP: 0 };
+                localStorage.setItem('userStats', JSON.stringify(userStats));
+                updateStatsDisplay();
+                renderRecentGoals();
+                renderChart();
+            });
+        }
     }
 
     // Category Selection
@@ -147,15 +169,18 @@ document.addEventListener('DOMContentLoaded', function() {
             completedDate: null
         };
 
-        // Add goal to array
-        userGoals.unshift(newGoal);
+        // Persist goal to global list without affecting other users
+        const all = getAllGoals();
+        all.unshift(newGoal);
+        setAllGoals(all);
 
-        // Update stats
-        userStats.totalGoals++;
-        userStats.activeGoals++;
+        // Update stats (recompute for current user)
+        const mine = all.filter(g => g.userId === currentUser.id);
+        userStats.totalGoals = mine.length;
+        userStats.activeGoals = mine.filter(g => g.status !== 'completed').length;
+        userStats.totalXP = mine.reduce((sum, g) => sum + (g.completed ? (g.xp || 0) : 0), 0);
 
         // Save to localStorage
-        localStorage.setItem('skillup_goals', JSON.stringify(userGoals));
         localStorage.setItem('userStats', JSON.stringify(userStats));
 
         // Show success message
@@ -225,14 +250,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Update stats display
     function updateStatsDisplay() {
-        document.getElementById('total-goals').textContent = userStats.totalGoals;
-        document.getElementById('active-goals').textContent = userStats.activeGoals;
-        document.getElementById('total-xp').textContent = userStats.totalXP;
+        const all = getAllGoals();
+        const mine = all.filter(g => currentUser && g.userId === currentUser.id);
+        const totalGoals = mine.length;
+        const activeGoals = mine.filter(g => g.status !== 'completed').length;
+        const totalXP = mine.reduce((sum, g) => sum + (g.completed ? (g.xp || 0) : 0), 0);
+
+        userStats = { totalGoals, activeGoals, totalXP };
+        localStorage.setItem('userStats', JSON.stringify(userStats));
+
+        document.getElementById('total-goals').textContent = totalGoals;
+        document.getElementById('active-goals').textContent = activeGoals;
+        document.getElementById('total-xp').textContent = totalXP;
     }
 
     // Render recent goals
     function renderRecentGoals() {
-        if (userGoals.length === 0) {
+        const all = getAllGoals();
+        const mine = all.filter(g => currentUser && g.userId === currentUser.id);
+        if (mine.length === 0) {
             recentGoalsList.innerHTML = `
                 <div class="no-goals">
                     <div style="font-size: 3rem; margin-bottom: 1rem;">🎯</div>
@@ -243,7 +279,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        const recentGoals = userGoals.slice(0, 5); // Show last 5 goals
+        const recentGoals = mine.slice(0, 5); // Show last 5 goals for this user
         let goalsHTML = '';
 
         recentGoals.forEach(goal => {
@@ -267,6 +303,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             goalsHTML += `
                 <div class="goal-item ${statusClass}">
+                    <input type="checkbox" class="goal-complete" data-goal-id="${goal.id}" ${goal.completed ? 'checked' : ''} title="Mark as completed" style="margin-right:10px; width:18px; height:18px;">
                     <div class="goal-info">
                         <div class="goal-title">${goal.title}</div>
                         <div class="goal-meta">${getCategoryIcon(goal.category)} ${goal.category} • ${statusText}</div>
@@ -277,6 +314,65 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         recentGoalsList.innerHTML = goalsHTML;
+
+        // Attach toggle handlers
+        recentGoalsList.querySelectorAll('.goal-complete').forEach(cb => {
+            cb.addEventListener('change', (e) => {
+                const id = Number(e.target.getAttribute('data-goal-id'));
+                const all = getAllGoals();
+                const idx = all.findIndex(g => g.id === id && g.userId === currentUser.id);
+                if (idx > -1) {
+                    const g = all[idx];
+                    const nowCompleted = e.target.checked;
+                    g.completed = nowCompleted;
+                    g.status = nowCompleted ? 'completed' : 'active';
+                    g.completedDate = nowCompleted ? new Date().toISOString() : null;
+                    setAllGoals(all);
+                    updateStatsDisplay();
+                    renderRecentGoals();
+                    renderChart();
+                    showMessage(nowCompleted ? `✅ Marked completed: ${g.title}` : `↩️ Marked active: ${g.title}`, 'success');
+                }
+            });
+        });
+    }
+
+    // Draw a simple bar chart (Completed vs Active) without external libs
+    function renderChart() {
+        const canvas = document.getElementById('goals-chart');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        const all = getAllGoals();
+        const mine = all.filter(g => currentUser && g.userId === currentUser.id);
+        const completed = mine.filter(g => g.completed).length;
+        const active = mine.length - completed;
+
+        // Clear
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Colors depending on theme
+        const dark = document.body.getAttribute('data-theme') === 'dark';
+        const axis = dark ? '#9ca3af' : '#4b5563';
+        const bar1 = '#10b981';
+        const bar2 = '#3b82f6';
+
+        // Axis
+        const pad = 30; const baseY = canvas.height - pad; const startX = pad; const endX = canvas.width - pad;
+        ctx.strokeStyle = axis; ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.moveTo(startX, baseY); ctx.lineTo(endX, baseY); ctx.stroke();
+
+        // Bars
+        const maxVal = Math.max(1, completed, active);
+        const barW = 60; const gap = 50; const yScale = (canvas.height - pad*2) / maxVal;
+        const bar1X = startX + 40; const bar2X = bar1X + barW + gap;
+        const bar1H = completed * yScale; const bar2H = active * yScale;
+        ctx.fillStyle = bar1; ctx.fillRect(bar1X, baseY - bar1H, barW, bar1H);
+        ctx.fillStyle = bar2; ctx.fillRect(bar2X, baseY - bar2H, barW, bar2H);
+
+        // Labels
+        ctx.fillStyle = axis; ctx.font = '12px Poppins, sans-serif'; ctx.textAlign = 'center';
+        ctx.fillText(`Done (${completed})`, bar1X + barW/2, baseY + 16);
+        ctx.fillText(`Active (${active})`, bar2X + barW/2, baseY + 16);
     }
 
     // Get category icon

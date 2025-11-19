@@ -13,6 +13,12 @@
     <nav class="navbar">
         <div class="container">
             <div class="logo">SkillUp</div>
+            <button class="theme-toggle" id="theme-toggle-goals" aria-label="Toggle dark mode">🌙</button>
+            <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
             <ul class="nav-links">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="index.html#features">Features</a></li>
@@ -32,6 +38,9 @@
             <div class="goals-header">
                 <h1>🎯 Set Your Learning Goal</h1>
                 <p>Define your objectives and start your journey towards mastery. Choose your skill, set your target, and earn XP along the way!</p>
+                <div style="margin-top: 10px; display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button id="reset-goals-btn" class="btn btn-danger" type="button">♻️ Reset My Goals</button>
+                </div>
             </div>
 
             <div class="goals-content">
@@ -139,6 +148,11 @@
                             <div class="stat-number" id="total-xp">0</div>
                             <div class="stat-label">Total XP</div>
                         </div>
+                    </div>
+
+                    <div class="stat-card" style="margin-bottom: 30px;">
+                        <h3 style="margin-bottom: 10px; color: var(--text-color);">Progress Overview</h3>
+                        <canvas id="goals-chart" width="300" height="160" aria-label="Completed vs Active chart"></canvas>
                     </div>
 
                     <div class="recent-goals">
