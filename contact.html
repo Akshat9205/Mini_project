@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact Us • SkillUp</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+  <!-- Optional EmailJS (only needed if you configured emailjs_config in localStorage) -->
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="container">
+      <div class="logo">SkillUp</div>
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="index.html#home">Home</a></li>
+        <li><a href="index.html#features">Features</a></li>
+        <li><a href="contact.html" id="contact-nav">Contact Us</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle">👤</a>
+          <div class="dropdown-menu">
+            <a href="login.html" class="dropdown-item" id="login-btn">🔐 Login</a>
+            <a href="goals.html" class="dropdown-item" id="dashboard-btn">🎯 Dashboard</a>
+            <button class="dropdown-item" id="logout-btn" style="background:none;border:none;text-align:left;width:100%">🚪 Logout</button>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Contact Page Header -->
+  <section class="hero" style="padding: 140px 0 60px;">
+    <div class="container">
+      <div class="hero-content">
+        <h1 class="reveal-up" style="--d:0ms">Let's Chat, Reach Out to Us</h1>
+        <p class="hero-subtitle reveal-up" style="--d:120ms">Have questions or feedback? We're here to help. Send us a message, and we'll respond within 24 hours.</p>
+      </div>
+    </div>
+    <div class="hero-blob hero-blob-1" aria-hidden="true"></div>
+    <div class="hero-blob hero-blob-2" aria-hidden="true"></div>
+  </section>
+
+  <!-- Contact Section -->
+  <section style="padding: 40px 0 90px;">
+    <div class="container">
+      <div class="contact-wrap">
+        <!-- Left: Form -->
+        <div class="contact-card">
+          <h3>Get in Touch</h3>
+          <p class="contact-sub">Send us a message and we'll get back to you.</p>
+          <div id="contact-message"></div>
+          <form id="contact-form">
+            <div class="row-2">
+              <div class="form-group">
+                <label for="contact-first">First Name</label>
+                <input type="text" id="contact-first" name="contact-first" placeholder="First name" required />
+              </div>
+              <div class="form-group">
+                <label for="contact-last">Last Name</label>
+                <input type="text" id="contact-last" name="contact-last" placeholder="Last name" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="contact-email">Email Address</label>
+              <input type="email" id="contact-email" name="contact-email" placeholder="you@example.com" required />
+            </div>
+            <div class="form-group">
+              <label for="contact-msg">Message</label>
+              <textarea id="contact-msg" name="contact-msg" rows="5" placeholder="Leave us a message" required></textarea>
+            </div>
+            <label class="remember-me" style="margin: 8px 0 6px;">
+              <input type="checkbox" id="contact-terms" required />
+              I agree to our friendly privacy policy
+            </label>
+            <div class="modal-buttons" style="justify-content:flex-end;">
+              <a class="btn btn-secondary" href="index.html">Cancel</a>
+              <button type="submit" class="btn btn-primary">Send Message</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Right: Visual + Info -->
+        <div class="contact-side">
+          <div class="side-hero">
+            <div class="side-emoji" aria-hidden="true">📱</div>
+          </div>
+          <div class="info-card">
+            <div class="info-icon">📧</div>
+            <div>
+              <strong>Email</strong>
+              <div>agakshat112005@gmail.com</div>
+            </div>
+          </div>
+          <div class="info-card">
+            <div class="info-icon">☎️</div>
+            <div>
+              <strong>Phone</strong>
+              <div>+91 8755827155</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer (simple) -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; 2025 SkillUp Tracker • Built with ❤️ by Team SkillUp</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Thank You Modal -->
+  <div id="thankyou-modal" class="modal" style="display:none;">
+    <div class="modal-content" style="max-width:520px; text-align:center;">
+      <button class="modal-close" id="thankyou-close">&times;</button>
+      <h2>🎉 Thank You!</h2>
+      <p>We’ve received your message and will get back to you shortly.</p>
+      <div class="modal-buttons" style="justify-content:center;">
+        <a href="index.html" class="btn btn-secondary">Go Home</a>
+        <button class="btn btn-primary" id="thankyou-ok">Okay</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

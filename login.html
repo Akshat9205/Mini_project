@@ -10,8 +10,8 @@
         /* Login Page Styles - matches provided mockup */
         .login-page {
             min-height: 100vh;
-            background: radial-gradient(1200px 600px at -10% -10%, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0) 60%),
-                        linear-gradient(135deg, #2E217A 0%, #331F6A 40%, #2A155B 100%);
+            background: radial-gradient(800px 400px at 10% 10%, rgba(255,255,255,0.8), rgba(255,255,255,0)),
+                        linear-gradient(180deg, #eaf8ee 0%, #dff3e8 100%);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -54,18 +54,20 @@
         }
 
         .brand-title {
-            font-weight: 700;
+            font-weight: 900;
+            color: #000;
             letter-spacing: 0.3px;
         }
 
         .brand-headline {
             font-size: 1.4rem;
             font-weight: 600;
+            color: #191532;
             margin: 0.75rem 0 0.5rem;
         }
 
         .brand-subtext {
-            color: #CFC8FF;
+            color: #7160dc;
             line-height: 1.8;
         }
 
@@ -87,43 +89,43 @@
         }
 
         .auth-card {
-            background: rgba(255,255,255,0.06);
-            border: 1px solid rgba(255,255,255,0.14);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            background: #ffffff;
+            border: 1px solid #e6f3ea;
             border-radius: 22px;
             padding: 2.2rem;
-            color: #fff;
-            box-shadow: 0 30px 80px rgba(0,0,0,0.35);
+            color: #111;
+            box-shadow: 0 24px 60px rgba(16,24,40,0.15);
+            animation: fadeUp .5s ease forwards;
         }
 
         .auth-card h2 {
             margin: 0 0 0.5rem 0;
             font-size: 1.9rem;
             font-weight: 800;
+            color: #0f172a;
         }
 
-        .auth-muted { color: #BEB6FF; font-size: 1rem; margin-bottom: 1.25rem; }
+        .auth-muted { color: #667085; font-size: 1rem; margin-bottom: 1.25rem; }
 
         .login-tabs { display: none; }
 
         .input-with-icon { position: relative; width: 100%; display: block; }
-        .input-with-icon svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #7F77C3; }
-        .input-with-icon .toggle-password { position: absolute; right: 40px; top: 65%; transform: translateY(-50%); background: none; border: 0; color: #7F77C3; cursor: pointer; padding: 4px; display: flex; align-items: center; justify-content: center; z-index: 9; }
-        .input-with-icon .toggle-password:focus { outline: none; }
+        .input-with-icon svg { position: absolute; left: 14px; top: 70%; transform: translateY(-50%); color: #98a2b3; }
+        .input-with-icon .toggle-password { position: absolute; right: 36px; top: 70%; transform: translateY(-50%); background: none; border: 0; color: #98a2b3; cursor: pointer; padding: 4px; display: flex; align-items: center; justify-content: center; z-index: 9; }
         .input-with-icon input {
             width: 100%;
             max-width: 100%;
             display: block;
             box-sizing: border-box;
             padding-left: 42px;
-            padding-right: 64px;
-            background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(255,255,255,0.92));
-            border-radius: 16px;
-            border: none;
-            box-shadow: 0 2px 0 rgba(0,0,0,0.15);
+            padding-right: 56px;
+            background: #fff;
+            border-radius: 12px;
+            border: 1px solid #E4E7EC;
+            height: 46px;
         }
-        .input-with-icon input::placeholder { color: #9DA0A6; }
+        .input-with-icon input::placeholder { color: #98A2B3; }
+        .input-with-icon input:focus { outline: none; border-color:#16a34a; box-shadow: 0 0 0 3px rgba(22,163,74,0.12); }
 
         .form-group { margin-bottom: 18px; }
         .form-group label { color: #DCD6FF; font-weight: 700; }
@@ -131,7 +133,8 @@
         .form-options a { color: #9AD0FF; }
         .form-options a:hover { text-decoration: underline; }
 
-        .btn-primary { width: 100%; padding: 14px 22px; border-radius: 12px; border: none; outline: none; font-weight: 700; font-size: 1rem; }
+        .btn-primary { width: 100%; padding: 14px 22px; border-radius: 10px; border: none; outline: none; font-weight: 700; font-size: 1rem; background:#111; color:#fff; box-shadow: 0 6px 18px rgba(16,24,40,0.12); }
+        .btn-primary:hover { filter: brightness(.96); }
         .modal-buttons { margin-top: 18px; display: block; }
 
         .alternate-auth { text-align: center; margin-top: 14px; color: #CFC8FF; font-size: 0.95rem; }
@@ -172,7 +175,15 @@
             text-decoration: none;
         }
 
-        .back-home:hover { background: rgba(255,255,255,0.2); transform: scale(1.05); }
+        .back-home:hover { background: rgba(0,0,0,0.08); transform: scale(1.05); }
+
+        /* Simple animations */
+        @keyframes fadeUp { 0% { opacity: 0; transform: translateY(10px);} 100% { opacity: 1; transform: translateY(0);} }
+        @keyframes floatY { 0%,100% { transform: translateY(0);} 50% { transform: translateY(-6px);} }
+        .hero-img { width: 100%; max-width: 420px; margin: 1rem auto; filter: drop-shadow(0 14px 40px rgba(16,24,40,0.12)); animation: floatY 6s ease-in-out infinite; border-radius: 12px; }
+        .dots { display:flex; gap:8px; justify-content:center; margin-top: 14px; }
+        .dot { width:8px; height:8px; background:#a7f3d0; border-radius: 9999px; opacity: .6; }
+        .dot.active { background:#16a34a; opacity: 1; }
 
         /* Responsive */
         @media (max-width: 900px) {
@@ -194,8 +205,10 @@
                     <div class="brand-logo-badge"></div>
                     <div class="brand-title">SkillUp Tracker</div>
                 </div>
-                <div class="brand-headline">Track your skills and learning progress with SkillUp Tracker</div>
-                <div class="brand-subtext">Organize goals, monitor progress, and build streaks with a beautiful, focused workspace.</div>
+                <div class="brand-headline">SkillUp</div>
+                <div class="brand-subtext">Unleash your learning potential with daily streaks, goals and progress tracking.</div>
+                <img class="hero-img" src="https://images.unsplash.com/photo-1523580846011-d3a5bc25702b?q=80&w=1200&auto=format&fit=crop" alt="Learning illustration">
+                <div class="dots"><span class="dot active"></span><span class="dot"></span><span class="dot"></span></div>
                 <div class="brand-cta">
                     <span class="brand-chip">Why SkillUp?</span>
                     <span class="brand-chip">Gamification</span>
@@ -223,12 +236,12 @@
 
                     <form id="login-form">
                         <div class="form-group input-with-icon">
-                            <label for="login-email">Your Email</label>
+                            <label for="login-email" style="color:#191532;">Your Email</label>
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm0 0l8 7 8-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                            <input type="email" id="login-email" name="login-email" placeholder="thisismail@gmail.com" required>
+                            <input type="email" id="login-email" name="login-email" placeholder="mail@gmail.com" required>
                         </div>
                         <div class="form-group input-with-icon">
-                            <label for="login-password">Password</label>
+                            <label for="login-password" style="color:#191532;">Password</label>
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="11" width="18" height="10" rx="2" ry="2" stroke="currentColor" stroke-width="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
                             <input type="password" id="login-password" name="login-password" placeholder="••••••••" required>
                             <button type="button" class="toggle-password" aria-label="Show password" data-target="login-password">
@@ -249,7 +262,7 @@
                     </form>
 
                     <div class="social-login">
-                        <p>Or continue with</p>
+                        <p style="color:#191532;">Or continue with</p>
                         <div class="social-buttons">
                             <button class="social-btn google" onclick="socialLogin('google')">
                                 <svg class="social-icon" viewBox="0 0 24 24" width="18" height="18"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
@@ -262,7 +275,28 @@
                         </div>
                     </div>
 
-                    <div class="alternate-auth">Don't have an account? <a href="signup.html" style="color:#9AD0FF; font-weight:600; text-decoration:none;">Sign up</a></div>
+                    <div class="alternate-auth" style="color:#191532;">Don't have an account? <a href="signup.html" style="color:#9AD0FF; font-weight:600; text-decoration:none;">Sign up</a></div>
+                </div>
+
+                <!-- OTP Verification Form -->
+                <div id="otp-form-container" style="display: none;">
+                    <div id="otp-message"></div>
+                    <form id="otp-form">
+                        <div class="form-group input-with-icon">
+                            <label for="otp-code">Enter OTP sent to your email</label>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm0 0l8 7 8-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            <input type="text" id="otp-code" name="otp-code" placeholder="6-digit code" maxlength="6" required>
+                        </div>
+                        <div class="modal-buttons">
+                            <button type="submit" class="btn btn-primary">Verify OTP</button>
+                        </div>
+                    </form>
+                    <div class="alternate-auth">
+                        Didn't get the code? <button type="button" id="resend-otp-btn">Resend OTP</button>
+                    </div>
+                    <div class="alternate-auth" style="margin-top:8px;">
+                        <button type="button" id="back-to-login-btn">Back to login</button>
+                    </div>
                 </div>
 
                 <!-- Signup Form -->

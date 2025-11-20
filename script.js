@@ -426,6 +426,60 @@ document.addEventListener('DOMContentLoaded', () => {
         observer.observe(section);
     });
 
+    const revealObserver = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('show');
+                obs.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.reveal-up').forEach(el => revealObserver.observe(el));
+
+    const animateCounter = (el) => {
+        const target = parseInt(el.getAttribute('data-target') || '0', 10);
+        const dur = 1400;
+        const start = performance.now();
+        const step = (now) => {
+            const p = Math.min(1, (now - start) / dur);
+            const val = Math.floor(target * (p < 0.5 ? 2*p*p : -1+(4-2*p)*p));
+            el.textContent = val.toLocaleString();
+            if (p < 1) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+    };
+
+    const counters = document.querySelectorAll('.counter');
+    if (counters.length) {
+        const countersObserver = new IntersectionObserver((entries, obs) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateCounter(entry.target);
+                    obs.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.6 });
+        counters.forEach(c => countersObserver.observe(c));
+    }
+
+    const hero = document.querySelector('.hero');
+    if (hero) {
+        const movables = hero.querySelectorAll('.hero-floating, .hero-blob');
+        hero.addEventListener('mousemove', (e) => {
+            const r = hero.getBoundingClientRect();
+            const x = (e.clientX - r.left) / r.width - 0.5;
+            const y = (e.clientY - r.top) / r.height - 0.5;
+            movables.forEach((el, i) => {
+                const d = (i+1) * 6;
+                el.style.transform = `translate(${x*d}px, ${y*d}px)`;
+            });
+        });
+        hero.addEventListener('mouseleave', () => {
+            movables.forEach(el => { el.style.transform = ''; });
+        });
+    }
+
     // Modal close buttons and outside click handlers
     if (document.getElementById('login-modal')) {
         document.getElementById('login-modal-close').addEventListener('click', () => {
@@ -435,6 +489,86 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('login-modal').addEventListener('click', (e) => {
             if (e.target === document.getElementById('login-modal')) {
                 closeLoginModal();
+            }
+        });
+    }
+
+    // Contact Us modal wiring (index.html)
+    const contactNav = document.getElementById('contact-nav');
+    const contactCta = document.getElementById('contact-cta-btn');
+    const contactFooter = document.getElementById('contact-footer');
+    const contactModal = document.getElementById('contact-modal');
+    const contactClose = document.getElementById('contact-modal-close');
+    const contactCancel = document.getElementById('contact-cancel');
+    const contactForm = document.getElementById('contact-form');
+
+    const openContact = (e) => {
+        if (contactModal) { if (e) e.preventDefault(); showModal('contact-modal'); }
+        // else let default navigation to contact.html proceed
+    };
+    const closeContact = () => { if (contactModal) hideModal('contact-modal'); };
+
+    if (contactNav) contactNav.addEventListener('click', openContact);
+    if (contactCta) contactCta.addEventListener('click', openContact);
+    if (contactFooter) contactFooter.addEventListener('click', openContact);
+    if (contactClose) contactClose.addEventListener('click', closeContact);
+    if (contactCancel) contactCancel.addEventListener('click', closeContact);
+    if (contactModal) {
+        contactModal.addEventListener('click', (e) => { if (e.target === contactModal) closeContact(); });
+    }
+
+    if (contactForm) {
+        contactForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const first = (document.getElementById('contact-first')?.value || '').trim();
+            const last = (document.getElementById('contact-last')?.value || '').trim();
+            const fallbackName = (document.getElementById('contact-name')?.value || '').trim();
+            const name = (first || last) ? `${first}${first&&last?' ':''}${last}`.trim() : fallbackName;
+            const email = (document.getElementById('contact-email')?.value || '').trim();
+            const msg = (document.getElementById('contact-msg')?.value || '').trim();
+
+            const setMsg = (type, text) => {
+                const target = contactModal ? document.querySelector('#contact-modal [id$="-message"]') : document.getElementById('contact-message');
+                if (target) target.innerHTML = `<div class="message ${type}">${text}</div>`;
+            };
+
+            if (!name || !email || !msg) { setMsg('error', 'Please fill out all fields.'); return; }
+            setMsg('info', 'Sending your message...');
+
+            // Try EmailJS if configured
+            let sent = false;
+            try {
+                const cfgRaw = localStorage.getItem('emailjs_config');
+                const cfg = cfgRaw ? JSON.parse(cfgRaw) : null;
+                if (window.emailjs && cfg && cfg.publicKey && cfg.serviceId && cfg.templateId) {
+                    if (!window.emailjs.__inited) { window.emailjs.init(cfg.publicKey); window.emailjs.__inited = true; }
+                    await window.emailjs.send(cfg.serviceId, cfg.templateId, {
+                        from_name: name,
+                        from_email: email,
+                        message: msg
+                    });
+                    sent = true;
+                }
+            } catch (err) { /* fallback below */ }
+
+            if (!sent) {
+                const inboxKey = 'skillup_contact_messages';
+                const arr = JSON.parse(localStorage.getItem(inboxKey) || '[]');
+                arr.push({ id: Date.now(), name, email, message: msg, createdAt: new Date().toISOString() });
+                localStorage.setItem(inboxKey, JSON.stringify(arr));
+            }
+
+            setMsg('success', 'Thanks! Your message has been received. We will reach out soon.');
+            contactForm.reset();
+            if (contactModal) setTimeout(closeContact, 1200);
+            const thankyou = document.getElementById('thankyou-modal');
+            if (thankyou) {
+                showModal('thankyou-modal');
+                const tyClose = document.getElementById('thankyou-close');
+                const tyOk = document.getElementById('thankyou-ok');
+                if (tyClose) tyClose.onclick = () => hideModal('thankyou-modal');
+                if (tyOk) tyOk.onclick = () => hideModal('thankyou-modal');
+                thankyou.addEventListener('click', (ev) => { if (ev.target === thankyou) hideModal('thankyou-modal'); });
             }
         });
     }

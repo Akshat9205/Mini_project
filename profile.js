@@ -150,8 +150,11 @@ function loadUserProgress() {
 
 // Calculate current streak
 function calculateStreak() {
-    // Simple streak calculation - can be enhanced
-    return Math.floor(Math.random() * 15) + 1; // Placeholder
+    const cu = getCurrentUser();
+    if (!cu || !cu.id) return 0;
+    const map = JSON.parse(localStorage.getItem('skillup_streaks') || '{}');
+    const entry = map[String(cu.id)] || { currentStreak: 0 };
+    return entry.currentStreak || 0;
 }
 
 // Load recent activity
@@ -242,6 +245,9 @@ function setupEventListeners() {
     document.addEventListener('visibilitychange', () => {
         if (!document.hidden) loadUserProgress();
     });
+
+    // Update 2FA button label on load
+    updateTwoFactorButton();
 }
 
 // Toggle edit mode
@@ -428,7 +434,94 @@ function handlePasswordChange(e) {
 
 // Enable two-factor authentication
 function enableTwoFactor() {
-    alert('Two-factor authentication setup coming soon! For now, your account is secure.');
+    const cu = getCurrentUser();
+    if (!cu) return;
+    const profileData = JSON.parse(localStorage.getItem('skillup_profile') || '{}');
+    const defEmail = (profileData.email || cu.email || '').trim();
+    const email = (prompt('Enter your email to receive OTP:', defEmail) || '').trim().toLowerCase();
+    if (!email || !email.includes('@')) {
+        showMessage('Invalid or empty email. 2FA setup cancelled.', 'error');
+        return;
+    }
+    startTwoFactorFlow(cu, email);
+}
+
+function updateTwoFactorButton() {
+    const cu = getCurrentUser();
+    const btn = document.getElementById('two-factor-btn');
+    if (!btn || !cu) return;
+    const status = JSON.parse(localStorage.getItem('skillup_2fa_status') || '{}');
+    const entry = status[String(cu.id)];
+    if (entry && entry.enabled) {
+        btn.textContent = 'Enabled';
+        btn.classList.add('secondary');
+    } else {
+        btn.textContent = 'Enable';
+        btn.classList.add('secondary');
+    }
+}
+
+function generateOtp() {
+    return (Math.floor(100000 + Math.random() * 900000)).toString();
+}
+
+async function sendOtpEmail(email, name, code) {
+    try {
+        const cfgRaw = localStorage.getItem('emailjs_config');
+        const cfg = cfgRaw ? JSON.parse(cfgRaw) : null;
+        if (window.emailjs && cfg && cfg.publicKey && cfg.serviceId && cfg.templateId) {
+            if (!window.emailjs.__inited) {
+                window.emailjs.init(cfg.publicKey);
+                window.emailjs.__inited = true;
+            }
+            await window.emailjs.send(cfg.serviceId, cfg.templateId, {
+                to_email: email,
+                user_name: name || email,
+                otp: code
+            });
+            return { sent: true };
+        }
+    } catch (e) {
+        return { sent: false, error: String(e) };
+    }
+    return { sent: false };
+}
+
+async function startTwoFactorFlow(user, email) {
+    const code = generateOtp();
+    const expiresAt = Date.now() + 5 * 60 * 1000;
+    const pending = { userId: user.id, email, code, expiresAt };
+    localStorage.setItem('skillup_2fa_pending', JSON.stringify(pending));
+
+    const res = await sendOtpEmail(email, user.name, code);
+    if (res.sent) {
+        showMessage(`OTP sent to ${email.replace(/(^.).*(@.*$)/, (m,a,b)=>a+'*****'+b)}.`, 'success');
+    } else {
+        showMessage(`OTP (testing): ${code}. Configure EmailJS to send emails.`, 'info');
+    }
+
+    const entered = (prompt('Enter the 6-digit OTP sent to your email:') || '').trim();
+    const latest = JSON.parse(localStorage.getItem('skillup_2fa_pending') || 'null');
+    if (!latest || latest.userId !== user.id) {
+        showMessage('2FA setup cancelled or expired.', 'error');
+        return;
+    }
+    if (Date.now() > latest.expiresAt) {
+        showMessage('OTP expired. Please click Enable again to restart.', 'error');
+        localStorage.removeItem('skillup_2fa_pending');
+        return;
+    }
+    if (entered !== String(latest.code)) {
+        showMessage('Invalid OTP. Please click Enable again to retry.', 'error');
+        return;
+    }
+
+    const status = JSON.parse(localStorage.getItem('skillup_2fa_status') || '{}');
+    status[String(user.id)] = { enabled: true, email, method: 'email', enabledAt: new Date().toISOString() };
+    localStorage.setItem('skillup_2fa_status', JSON.stringify(status));
+    localStorage.removeItem('skillup_2fa_pending');
+    updateTwoFactorButton();
+    showMessage('Two-factor authentication enabled!', 'success');
 }
 
 // Save notification settings

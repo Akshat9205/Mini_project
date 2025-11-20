@@ -77,6 +77,20 @@ function setupEventListeners() {
             t.setAttribute('aria-label', input.type === 'password' ? 'Show password' : 'Hide password');
         });
     });
+
+    // OTP form events (if present on page)
+    const otpForm = document.getElementById('otp-form');
+    const resendBtn = document.getElementById('resend-otp-btn');
+    const backBtn = document.getElementById('back-to-login-btn');
+    if (otpForm) {
+        otpForm.addEventListener('submit', handleOtpVerify);
+    }
+    if (resendBtn) {
+        resendBtn.addEventListener('click', resendOtp);
+    }
+    if (backBtn) {
+        backBtn.addEventListener('click', cancelOtpFlow);
+    }
 }
 
 // Show login form
@@ -126,17 +140,133 @@ async function handleLogin(e) {
     const result = await login(email, password);
 
     if (result.success) {
-        window.currentUser = result.user;
-        localStorage.setItem('skillup_user', JSON.stringify(window.currentUser));
-        showMessage('login', 'Login successful! Redirecting...', 'success');
-
-        // Redirect after delay
-        setTimeout(() => {
-            window.location.href = 'profile.html';
-        }, 1500);
+        // Start OTP flow instead of immediate login
+        startOtpFlow(result.user);
     } else {
         showMessage('login', result.error, 'error');
     }
+}
+
+// Generate a 6-digit OTP
+function generateOtp() {
+    return (Math.floor(100000 + Math.random() * 900000)).toString();
+}
+
+// Attempt to send OTP via EmailJS if configured, else fallback to on-screen info
+async function sendOtpEmail(email, name, code) {
+    try {
+        const cfgRaw = localStorage.getItem('emailjs_config');
+        const cfg = cfgRaw ? JSON.parse(cfgRaw) : null;
+        if (window.emailjs && cfg && cfg.publicKey && cfg.serviceId && cfg.templateId) {
+            if (!window.emailjs.__inited) {
+                window.emailjs.init(cfg.publicKey);
+                window.emailjs.__inited = true;
+            }
+            await window.emailjs.send(cfg.serviceId, cfg.templateId, {
+                to_email: email,
+                user_name: name || email,
+                otp: code
+            });
+            return { sent: true };
+        }
+    } catch (err) {
+        console.warn('OTP email send failed', err);
+        return { sent: false, error: String(err) };
+    }
+    return { sent: false };
+}
+
+// Begin OTP flow: store pending login and show OTP UI
+async function startOtpFlow(user) {
+    const code = generateOtp();
+    const expiresAt = Date.now() + 5 * 60 * 1000; // 5 minutes
+    const pending = { user, code, expiresAt };
+    localStorage.setItem('skillup_pending_login', JSON.stringify(pending));
+
+    const sendRes = await sendOtpEmail(user.email, user.name, code);
+    const masked = (user.email || '').replace(/(^.).*(@.*$)/, (m, a, b) => a + '*****' + b);
+    if (sendRes.sent) {
+        showMessage('login', `OTP sent to ${masked}.`, 'success');
+    } else {
+        showMessage('login', `OTP generated and shown here for testing: ${code}. Configure EmailJS to send emails.`, 'info');
+    }
+
+    // Switch UI to OTP form
+    const loginBox = document.getElementById('login-form-container');
+    const otpBox = document.getElementById('otp-form-container');
+    if (loginBox && otpBox) {
+        loginBox.style.display = 'none';
+        otpBox.style.display = 'block';
+        const otpMsg = document.getElementById('otp-message');
+        if (otpMsg) {
+            otpMsg.innerHTML = `<div class="message info">Enter the 6-digit code sent to ${masked}.</div>`;
+        }
+        const otpInput = document.getElementById('otp-code');
+        if (otpInput) otpInput.value = '';
+    }
+}
+
+// Verify OTP handler
+function handleOtpVerify(e) {
+    e.preventDefault();
+    const input = (document.getElementById('otp-code')?.value || '').trim();
+    const pendingRaw = localStorage.getItem('skillup_pending_login');
+    if (!pendingRaw) {
+        setOtpMessage('No pending verification found. Please login again.', 'error');
+        return;
+    }
+    const pending = JSON.parse(pendingRaw);
+    if (Date.now() > (pending.expiresAt || 0)) {
+        setOtpMessage('OTP expired. Please resend or login again.', 'error');
+        return;
+    }
+    if (input !== String(pending.code)) {
+        setOtpMessage('Invalid OTP. Please try again.', 'error');
+        return;
+    }
+
+    // Success: complete login
+    window.currentUser = pending.user;
+    localStorage.setItem('skillup_user', JSON.stringify(window.currentUser));
+    localStorage.removeItem('skillup_pending_login');
+    setOtpMessage('Verification successful! Redirecting...', 'success');
+    setTimeout(() => {
+        window.location.href = 'profile.html';
+    }, 1000);
+}
+
+function resendOtp() {
+    const pendingRaw = localStorage.getItem('skillup_pending_login');
+    const pending = pendingRaw ? JSON.parse(pendingRaw) : null;
+    if (!pending || !pending.user) {
+        setOtpMessage('Nothing to resend. Please login again.', 'error');
+        return;
+    }
+    // issue a new code and extend expiry
+    const newCode = generateOtp();
+    pending.code = newCode;
+    pending.expiresAt = Date.now() + 5 * 60 * 1000;
+    localStorage.setItem('skillup_pending_login', JSON.stringify(pending));
+    sendOtpEmail(pending.user.email, pending.user.name, newCode).then((res) => {
+        const masked = (pending.user.email || '').replace(/(^.).*(@.*$)/, (m, a, b) => a + '*****' + b);
+        if (res.sent) setOtpMessage(`A new OTP was sent to ${masked}.`, 'success');
+        else setOtpMessage(`New OTP (testing): ${newCode}. Configure EmailJS to send emails.`, 'info');
+    });
+}
+
+function cancelOtpFlow() {
+    localStorage.removeItem('skillup_pending_login');
+    const loginBox = document.getElementById('login-form-container');
+    const otpBox = document.getElementById('otp-form-container');
+    if (loginBox && otpBox) {
+        otpBox.style.display = 'none';
+        loginBox.style.display = 'block';
+    }
+}
+
+function setOtpMessage(text, type) {
+    const msg = document.getElementById('otp-message');
+    if (msg) msg.innerHTML = `<div class="message ${type}">${text}</div>`;
 }
 
 // Signup function

@@ -18,7 +18,6 @@
     <nav class="navbar">
         <div class="container">
             <div class="logo">SkillUp</div>
-            <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">🌙</button>
             <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
                 <span class="bar"></span>
                 <span class="bar"></span>
@@ -27,7 +26,7 @@
             <ul class="nav-links">
                 <li><a href="#home">Home</a></li>
                 <li><a href="#features">Features</a></li>
-                <li><a href="#ai">AI Power</a></li>
+                <li><a href="contact.html" id="contact-nav">Contact Us</a></li>
                 <li><a href="#gamification">Gamification</a></li>
                 <li><a href="#impact">Impact</a></li>
                 <li class="dropdown">
@@ -45,16 +44,57 @@
     <!-- Hero Section -->
     <section class="hero" id="home">
         <div class="container">
-            <div class="hero-content">
-                <h1>Track. Learn. Level Up Your Skills.</h1>
-                <p class="hero-subtitle">Turn your daily learning goals into a fun, gamified journey — with AI-powered progress tracking.</p>
-                <div class="hero-buttons">
-                    <a href="goals.html" class="btn btn-primary">Get Started</a>
-                    <a href="#features" class="btn btn-secondary">Explore Features</a>
+            <div class="hero-content hero-grid">
+                <div class="hero-left">
+                    <h1 class="reveal-up" style="--d:0ms">Track. Learn. Level Up Your Skills.</h1>
+                    <p class="hero-subtitle reveal-up" style="--d:120ms">Turn your daily learning goals into a fun, gamified journey — with AI-powered progress tracking.</p>
+                    <div class="hero-badges reveal-up" style="--d:240ms">
+                        <span>🎯 Daily Goals</span>
+                        <span>🔥 Streaks</span>
+                        <span>🏆 Badges</span>
+                        <span>📈 Leaderboard</span>
+                    </div>
+                    <div class="hero-buttons reveal-up" style="--d:360ms">
+                        <a href="goals.html" class="btn btn-primary">Get Started</a>
+                        <a href="#features" class="btn btn-secondary">Explore Features</a>
+                    </div>
+                </div>
+                <div class="hero-right">
+                    <div class="hero-visual-card">
+                        <div class="hero-visual-emoji">🚀</div>
+                        <div class="hero-floating one">+150 XP</div>
+                        <div class="hero-floating two">Streak Day 7 🔥</div>
+                    </div>
                 </div>
             </div>
         </div>
+        <div class="hero-blob hero-blob-1" aria-hidden="true"></div>
+        <div class="hero-blob hero-blob-2" aria-hidden="true"></div>
     </section>
+
+    <!-- Animated Stats Strip -->
+    <div class="stats-strip" id="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <strong class="counter" data-target="12000">0</strong>
+                    <span>Learners Impacted</span>
+                </div>
+                <div class="stat-item">
+                    <strong class="counter" data-target="350">0</strong>
+                    <span>Daily Goals Created</span>
+                </div>
+                <div class="stat-item">
+                    <strong class="counter" data-target="98">0</strong>
+                    <span>Streak Max</span>
+                </div>
+                <div class="stat-item">
+                    <strong class="counter" data-target="125000">0</strong>
+                    <span>XP Earned</span>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Problem Section -->
     <section class="problem" id="problem">
@@ -219,7 +259,7 @@
             <div class="cta-buttons">
                 <a href="goals.html" class="btn btn-primary">Join Beta</a>
                 <a href="goals.html" class="btn btn-secondary">Try the Demo</a>
-                <a href="#" class="btn btn-secondary">Connect with Team</a>
+                <a href="contact.html" class="btn btn-secondary" id="contact-cta-btn">Connect with Team</a>
             </div>
         </div>
     </section>
@@ -242,7 +282,7 @@
                     <h4>Product</h4>
                     <a href="#features">Features</a>
                     <a href="#gamification">Gamification</a>
-                    <a href="#ai">AI Power</a>
+                    <a href="contact.html" id="contact-footer">Contact Us</a>
                     <a href="#cta">Get Started</a>
                 </div>
                 <div class="footer-links">

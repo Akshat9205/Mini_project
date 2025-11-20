@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SkillUp Auth Demo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    body { font-family: Poppins, system-ui, -apple-system, Segoe UI, Roboto, Arial; background:#f6f8fb; margin:0; }
+    .shell{ max-width: 900px; margin: 40px auto; background:#fff; border:1px solid #e5e7eb; border-radius:14px; padding:24px; box-shadow:0 12px 30px rgba(16,24,40,0.08); }
+    h1{ margin:0 0 8px; }
+    .row{ display:flex; gap:24px; align-items:flex-start; }
+    .col{ flex:1; }
+    pre{ background:#0f172a; color:#e2e8f0; padding:12px; border-radius:10px; overflow:auto; }
+    .card{ border:1px solid #e5e7eb; border-radius:12px; padding:16px; background:#fff; }
+    .btn{ padding:10px 14px; border-radius:10px; border:1px solid #111; background:#111; color:#fff; cursor:pointer; }
+  </style>
+  <!-- Google Identity Services -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <!-- Facebook SDK -->
+  <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+</head>
+<body>
+  <div class="shell">
+    <h1>SkillUp Auth Demo</h1>
+    <p>Google and Facebook sign-in demo. Make sure the backend is running at <code>http://localhost:4000</code>.</p>
+
+    <div class="row">
+      <div class="col card">
+        <h3>Google Sign-In</h3>
+        <div id="g_id_onload"
+             data-client_id="YOUR_GOOGLE_CLIENT_ID"
+             data-context="signin"
+             data-ux_mode="popup"
+             data-callback="onGoogleCredential"
+             data-auto_prompt="false">
+        </div>
+        <div class="g_id_signin" data-type="standard" data-shape="rectangular" data-theme="outline" data-text="signin_with" data-size="large" data-logo_alignment="left"></div>
+      </div>
+
+      <div class="col card">
+        <h3>Facebook Login</h3>
+        <div id="fb-root"></div>
+        <div class="fb-login-button" data-width="" data-size="large" data-button-type="continue_with" data-layout="default" data-auto-logout-link="false" data-use-continue-as="true" scope="public_profile,email" onlogin="onFacebookLoggedIn();"></div>
+      </div>
+    </div>
+
+    <h3>Response</h3>
+    <pre id="output">Waiting...</pre>
+  </div>
+
+  <script>
+    const output = document.getElementById('output');
+    const setOut = (data) => output.textContent = typeof data === 'string' ? data : JSON.stringify(data, null, 2);
+
+    // Google callback - receives ID token
+    async function onGoogleCredential(resp){
+      try {
+        const credential = resp && resp.credential;
+        if(!credential){ setOut('No credential received'); return; }
+        const r = await fetch('http://localhost:4000/google-login', {
+          method:'POST', headers:{ 'Content-Type':'application/json' },
+          body: JSON.stringify({ credential })
+        });
+        const json = await r.json();
+        setOut(json);
+        // Store in demo state
+        window.demoUser = json.user;
+      } catch(e){ setOut({ error: String(e) }); }
+    }
+
+    // Facebook init
+    window.fbAsyncInit = function() {
+      FB.init({ appId: 'YOUR_FACEBOOK_APP_ID', cookie: true, xfbml: true, version: 'v20.0' });
+    };
+
+    async function onFacebookLoggedIn(){
+      FB.getLoginStatus(async function(response) {
+        if (response.status === 'connected') {
+          const access_token = response.authResponse.accessToken;
+          const r = await fetch('http://localhost:4000/facebook-login', {
+            method:'POST', headers:{ 'Content-Type':'application/json' },
+            body: JSON.stringify({ access_token })
+          });
+          const json = await r.json();
+          setOut(json);
+          window.demoUser = json.user;
+        } else {
+          setOut(response);
+        }
+      });
+    }
+  </script>
+</body>
+</html>

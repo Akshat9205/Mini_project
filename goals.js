@@ -174,6 +174,9 @@ document.addEventListener('DOMContentLoaded', function() {
         all.unshift(newGoal);
         setAllGoals(all);
 
+        // Update daily streak once per day on first goal creation
+        updateDailyStreakOnGoalCreate();
+
         // Update stats (recompute for current user)
         const mine = all.filter(g => g.userId === currentUser.id);
         userStats.totalGoals = mine.length;
@@ -200,6 +203,43 @@ document.addEventListener('DOMContentLoaded', function() {
             window.location.href = 'index.html#goals';
         }, 2000);
     });
+
+    // Update the user's daily streak when a goal is created
+    function updateDailyStreakOnGoalCreate() {
+        if (!currentUser || !currentUser.id) return;
+        const key = 'skillup_streaks';
+        const map = JSON.parse(localStorage.getItem(key) || '{}');
+        const userId = String(currentUser.id);
+        const today = new Date();
+        const todayStr = today.toLocaleDateString('en-CA'); // YYYY-MM-DD in local time
+
+        const entry = map[userId] || { currentStreak: 0, lastIncrementDate: null };
+
+        if (entry.lastIncrementDate === todayStr) {
+            // already incremented today
+            map[userId] = entry;
+            localStorage.setItem(key, JSON.stringify(map));
+            return;
+        }
+
+        // Determine if last increment was yesterday to continue streak
+        let nextStreak = 1;
+        if (entry.lastIncrementDate) {
+            const last = new Date(entry.lastIncrementDate);
+            // compute yesterday string
+            const y = new Date(today);
+            y.setDate(today.getDate() - 1);
+            const yStr = y.toLocaleDateString('en-CA');
+            if (entry.lastIncrementDate === yStr) {
+                nextStreak = (entry.currentStreak || 0) + 1;
+            } else {
+                nextStreak = 1; // reset
+            }
+        }
+
+        map[userId] = { currentStreak: nextStreak, lastIncrementDate: todayStr };
+        localStorage.setItem(key, JSON.stringify(map));
+    }
 
     // Calculate XP reward
     function calculateXPReward() {
