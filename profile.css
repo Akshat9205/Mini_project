@@ -475,23 +475,14 @@ input:checked + .slider:before {
     background: var(--primary-color);
     color: white;
 }
-
-.btn-primary:hover {
-    background: var(--primary-dark);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(106, 17, 203, 0.4);
-}
-
 .btn-secondary {
     background: #6c757d;
     color: white;
 }
-
 .btn-secondary:hover {
     background: #5a6268;
     transform: translateY(-2px);
 }
-
 .btn-danger {
     background: #dc3545;
     color: white;

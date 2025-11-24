@@ -57,7 +57,7 @@
         }
 
         .goals-container {
-            max-width: 900px;
+            max-width: 1150px;
             margin: 0 auto;
             padding: 0 20px;
         }
@@ -65,6 +65,7 @@
         .goals-header {
             text-align: center;
             margin-bottom: 40px;
+            animation: fadeSlideDown 700ms ease-out both;
         }
 
         .goals-header h1 {
@@ -83,17 +84,20 @@
         .goals-content {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 40px;
+            gap: 28px;
             margin-top: 40px;
         }
 
         .goals-form-section {
             background: #ffffff;
             border: 1px solid #eef0f6;
-            padding: 36px;
+            padding: 28px;
             border-radius: 20px;
             box-shadow: 0 12px 30px rgba(0,0,0,0.08);
             color: var(--text-color);
+            transform: translateY(10px);
+            opacity: 0;
+            animation: riseIn 800ms 120ms ease-out forwards;
         }
 
         .goals-form-section h2 {
@@ -104,7 +108,7 @@
         }
 
         .form-group {
-            margin-bottom: 25px;
+            margin-bottom: 16px;
         }
 
         .form-group label {
@@ -192,7 +196,7 @@
         .form-actions {
             display: flex;
             gap: 15px;
-            margin-top: 30px;
+            margin-top: 20px;
         }
 
         .btn-cancel {
@@ -215,10 +219,16 @@
         .goals-preview-section {
             background: #ffffff;
             border: 1px solid #eef0f6;
-            padding: 36px;
+            padding: 28px;
             border-radius: 20px;
             box-shadow: 0 12px 30px rgba(0,0,0,0.08);
             color: var(--text-color);
+            transform: translateY(10px);
+            opacity: 0;
+            animation: riseIn 800ms 220ms ease-out forwards;
+            position: sticky;
+            top: 96px;
+            align-self: start;
         }
 
         .goals-preview-section h2 {
@@ -233,6 +243,7 @@
             grid-template-columns: repeat(2, 1fr);
             gap: 15px;
             margin-bottom: 30px;
+            animation: fadeIn 600ms ease-out both;
         }
 
         .category-card {
@@ -243,6 +254,8 @@
             cursor: pointer;
             transition: all 0.3s ease;
             background: var(--light-color);
+            position: relative;
+            overflow: hidden;
         }
 
         .category-card:hover {
@@ -256,6 +269,7 @@
             background: rgba(106, 17, 203, 0.1);
             color: var(--primary-color);
             font-weight: 600;
+            box-shadow: 0 10px 25px rgba(106, 17, 203, 0.18);
         }
 
         .category-icon {
@@ -317,6 +331,7 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 20px;
+            margin-top: 18px;
             margin-bottom: 30px;
         }
 
@@ -327,6 +342,7 @@
             text-align: center;
             transition: transform 0.3s ease;
             color: var(--text-color);
+            animation: fadeIn 700ms ease both;
         }
 
         .stat-card:hover {
@@ -351,6 +367,7 @@
             padding: 20px;
             border-radius: 12px;
             margin-top: 30px;
+            animation: fadeIn 900ms ease both;
         }
 
         .quick-tips h3 {
@@ -375,6 +392,7 @@
             .goals-content {
                 grid-template-columns: 1fr;
                 gap: 30px;
+                animation: none;
             }
 
             .goals-categories {
@@ -394,7 +412,115 @@
                 gap: 15px;
             }
         }
-   
+
+/* Entrance and glow animations */
+@keyframes fadeSlideDown { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes riseIn { from { opacity: 0; transform: translateY(14px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* Stagger for category cards */
+.goals-categories .category-card:nth-child(1) { animation: riseIn 600ms 60ms ease-out both; }
+.goals-categories .category-card:nth-child(2) { animation: riseIn 600ms 120ms ease-out both; }
+.goals-categories .category-card:nth-child(3) { animation: riseIn 600ms 180ms ease-out both; }
+.goals-categories .category-card:nth-child(4) { animation: riseIn 600ms 240ms ease-out both; }
+.goals-categories .category-card:nth-child(5) { animation: riseIn 600ms 300ms ease-out both; }
+.goals-categories .category-card:nth-child(6) { animation: riseIn 600ms 360ms ease-out both; }
+
+/* Subtle highlight sweep on hover */
+.category-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, transparent 0%, rgba(106,17,203,0.06) 40%, rgba(37,117,252,0.06) 60%, transparent 100%);
+    transform: translateX(-100%);
+    transition: transform 500ms ease;
+}
+.category-card:hover::after { transform: translateX(0); }
+
+/* Emphasis for section headers */
+.goals-form-section h2,
+.goals-preview-section h2 {
+    position: relative;
+}
+.goals-form-section h2::after,
+.goals-preview-section h2::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -10px;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 4px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    box-shadow: 0 0 12px var(--ring-color);
+}
+
+/* Buttons polish in Goals page */
+.goals-page .btn,
+.goals-page .btn-primary,
+.goals-page .btn-danger,
+.goals-page .btn-ghost,
+.goals-page .btn-cancel {
+    border: none;
+    cursor: pointer;
+    transition: transform .18s ease, box-shadow .2s ease, background .2s ease, color .2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.goals-page .btn-ghost,
+.goals-page .btn-secondary {
+    border: 2px solid var(--primary-color);
+    background: transparent;
+    color: var(--primary-color);
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-weight: 600;
+}
+
+.goals-page .btn-ghost:hover,
+.goals-page .btn-secondary:hover {
+    background: var(--primary-color);
+    color: #fff;
+    box-shadow: 0 8px 24px rgba(106,17,203,0.25);
+}
+
+.goals-page .btn-primary {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 10px 24px rgba(37,117,252,0.25);
+}
+
+.goals-page .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 36px rgba(37,117,252,0.35);
+}
+
+.goals-page .btn-primary:active {
+    transform: translateY(0);
+}
+
+.goals-page .btn-danger {
+    background: var(--accent-color);
+    color: #fff;
+    box-shadow: 0 10px 24px rgba(255,107,107,0.25);
+}
+
+.goals-page .btn-danger:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 36px rgba(255,107,107,0.35);
+}
+
+/* XP preview shimmer */
+.xp-preview .xp-amount {
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+/* Chart card subtle hover */
+canvas#goals-chart:hover { filter: drop-shadow(0 6px 18px rgba(0,0,0,0.18)); }
 
 /* Responsive improvements */
 @media (max-width: 480px) {
@@ -418,3 +544,48 @@
         font-size: 0.9rem;
     }
 }
+
+/* Frequency toggle pills */
+.freq-toggle { display: inline-flex; gap: 8px; background: #f2f5fb; border: 1px solid #e6e9f2; padding: 6px; border-radius: 999px; }
+.freq-toggle .pill { border: 0; background: transparent; color: #374151; padding: 8px 14px; border-radius: 999px; font-weight: 700; cursor: pointer; transition: background .2s ease, color .2s ease, transform .1s ease; }
+.freq-toggle .pill:hover { background: #e9edf7; }
+.freq-toggle .pill.active { background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color: #fff; box-shadow: 0 8px 22px rgba(37,117,252,0.25); }
+
+/* More options glass panel */
+.more-panel[hidden] { display: none; }
+.more-panel { margin-top: 10px; background: rgba(255,255,255,0.7); border: 1px solid #eef0f6; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: 14px; padding: 14px; animation: fadeIn 300ms ease both; }
+
+/* Emoji picker */
+.emoji-grid { display: grid; grid-template-columns: repeat(8, 28px); gap: 8px; }
+.emoji-grid .emoji { width: 28px; height: 28px; line-height: 28px; text-align: center; border-radius: 8px; border: 1px solid #e5e7eb; background: #fff; cursor: pointer; transition: transform .15s ease, box-shadow .2s ease, border-color .2s ease; }
+.emoji-grid .emoji:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
+.emoji-grid .emoji.selected { border-color: var(--primary-color); box-shadow: 0 10px 24px rgba(106,17,203,0.2); }
+
+/* Chips */
+.chip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 999px; background: #f1f5f9; color: #334155; font-weight: 600; font-size: .85rem; }
+
+/* Ripple + pressed states (used by goals.js) */
+.pressed { transform: translateY(1px) scale(0.98); }
+.ripple { position: absolute; border-radius: 50%; transform: scale(0); animation: rippleAnim 650ms ease-out; background: rgba(255,255,255,0.45); pointer-events: none; }
+.ripple.dark-ripple { background: rgba(17,24,39,0.15); }
+@keyframes rippleAnim { to { transform: scale(3); opacity: 0; } }
+
+/* Goal cards grid */
+.goal-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+.goal-card { perspective: 1000px; }
+.goal-card .card-inner { position: relative; border-radius: 16px; background: #fff; border: 1px solid #eef0f6; box-shadow: 0 14px 32px rgba(0,0,0,0.08); transform-style: preserve-3d; transition: transform .6s cubic-bezier(.2,.6,.2,1), box-shadow .3s ease; }
+.goal-card.tilt .card-inner { transform: rotateX(var(--rx, 0)) rotateY(var(--ry, 0)); }
+.goal-card .card-face { position: relative; padding: 16px; border-radius: 16px; backface-visibility: hidden; min-height: 180px; display: grid; align-content: center; gap: 8px; }
+.goal-card .card-face.front { background: #fff; }
+.goal-card .card-face.back { background: #ffffff; transform: rotateY(180deg); }
+.goal-card .card-inner.flipped { transform: rotateY(180deg); }
+
+/* Progress ring */
+.ring { display: grid; place-content: center; margin: 4px auto 6px; }
+.ring svg circle { fill: none; stroke-width: 10; }
+.ring svg circle.bg { stroke: #e5e7eb; }
+.ring svg circle.fg { stroke-linecap: round; transition: stroke-dashoffset .6s ease; }
+
+.goal-card .title { font-weight: 800; color: #0f172a; text-align: center; }
+.goal-card .meta { display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; }
+.goal-card .actions { display: flex; justify-content: center; gap: 10px; margin-top: 10px; }

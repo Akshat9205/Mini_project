@@ -224,27 +224,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Theme: initialize from localStorage
     const applyTheme = (theme) => {
-        if (theme === 'dark') {
-            document.body.setAttribute('data-theme', 'dark');
-        } else {
-            document.body.removeAttribute('data-theme');
-        }
-        // Update toggle icon on all buttons
-        document.querySelectorAll('.theme-toggle').forEach(btn => {
-            btn.textContent = document.body.getAttribute('data-theme') === 'dark' ? '☀️' : '🌙';
-            btn.setAttribute('aria-label', document.body.getAttribute('data-theme') === 'dark' ? 'Toggle light mode' : 'Toggle dark mode');
-        });
+        document.body.removeAttribute('data-theme');
     };
-    applyTheme(localStorage.getItem('skillup_theme'));
-    // Theme toggle listeners (support multiple pages)
-    document.querySelectorAll('.theme-toggle').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const isDark = document.body.getAttribute('data-theme') === 'dark';
-            const next = isDark ? 'light' : 'dark';
-            localStorage.setItem('skillup_theme', next);
-            applyTheme(next);
-        });
-    });
+    localStorage.removeItem('skillup_theme');
+    applyTheme('light');
 
     // Dropdown toggle
     const dropdownToggleEl = document.querySelector('.dropdown-toggle');

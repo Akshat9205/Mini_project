@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Features • SkillUp</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Scoped extras for Features page */
+    .feat-hero { padding: 140px 0 70px; position: relative; overflow: hidden; }
+    .feat-hero .headline { font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; margin: 0 0 10px; animation: slideX 700ms ease both; }
+    .feat-hero .sub { color: rgba(16,24,40,0.75); max-width: 760px; animation: slideUp 800ms 120ms ease both; }
+
+    .feature-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+    .f-card { background: #fff; border: 1px solid #eef0f6; border-radius: 18px; padding: 20px; box-shadow: var(--shadow-md);
+              transition: transform .25s ease, box-shadow .25s ease; position: relative; overflow: hidden; will-change: transform; transform-style: preserve-3d; animation: cardIn 680ms ease both; }
+    .f-card:hover { transform: translateY(-6px) rotate3d(1, 1, 0, 2deg); box-shadow: var(--shadow-lg); }
+    .f-icon { font-size: 2rem; }
+    .f-title { font-weight: 700; margin: 8px 0 6px; }
+    .f-desc { color: #667085; }
+
+    /* hover glow sweep */
+    .f-card::after { content:""; position: absolute; inset: 0; background: linear-gradient(120deg, transparent 0%, rgba(106,17,203,.06) 40%, rgba(37,117,252,.06) 60%, transparent 100%); transform: translateX(-100%); transition: transform 550ms ease; }
+    .f-card:hover::after { transform: translateX(0); }
+
+    /* Stagger entries for cards */
+    .feature-grid .f-card:nth-child(1){ animation-delay: 40ms; }
+    .feature-grid .f-card:nth-child(2){ animation-delay: 110ms; }
+    .feature-grid .f-card:nth-child(3){ animation-delay: 180ms; }
+    .feature-grid .f-card:nth-child(4){ animation-delay: 250ms; }
+    .feature-grid .f-card:nth-child(5){ animation-delay: 320ms; }
+    .feature-grid .f-card:nth-child(6){ animation-delay: 390ms; }
+
+    /* marquee badges */
+    .marquee { overflow: hidden; border-radius: 14px; background: var(--gray-color); padding: 10px 0; }
+    .marquee-track { display: flex; gap: 18px; animation: scrollX 22s linear infinite; }
+    .badge { background: #fff; border:1px solid #eef0f6; padding: 8px 12px; border-radius: 999px; font-weight: 600; white-space: nowrap; }
+    @keyframes scrollX { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* comparison strip */
+    .compare { display:grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .c-card { border:1px solid #eef0f6; background:#fff; border-radius:16px; padding:18px; box-shadow: var(--shadow-md); }
+    .c-title { font-weight:700; margin-bottom:8px; }
+    .c-list { list-style:none; padding:0; margin:0; }
+    .c-list li { padding:6px 0; display:flex; gap:8px; align-items:center; }
+
+    /* CTA band */
+    .cta-band { padding: 70px 0; text-align: center; }
+    .cta-band .card { display:inline-block; background: #111; color: #fff; border-radius: 16px; padding: 24px 28px; box-shadow: 0 16px 42px rgba(0,0,0,0.2); }
+
+    /* Unique keyframes for Features page (distinct from About) */
+    @keyframes slideX { from { opacity: 0; transform: translateX(-18px); } to { opacity: 1; transform: translateX(0); } }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes cardIn { from { opacity: 0; transform: translateY(16px) rotateX(4deg); } to { opacity: 1; transform: translateY(0) rotateX(0); } }
+
+    @media (max-width: 1000px){ .feature-grid { grid-template-columns: repeat(2,1fr); } .compare { grid-template-columns: 1fr; } }
+    @media (max-width: 560px){ .feature-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="container">
+      <div class="logo">SkillUp</div>
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="index.html#home">Home</a></li>
+        <li><a href="features.html" aria-current="page">Features</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="contact.html" id="contact-nav">Contact Us</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle">👤</a>
+          <div class="dropdown-menu">
+            <a href="login.html" class="dropdown-item" id="login-btn">🔐 Login</a>
+            <a href="goals.html" class="dropdown-item">🎯 Set Goal</a>
+            <a href="profile.html" class="dropdown-item">👤 My Profile</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="feat-hero">
+    <div class="container">
+      <h1 class="headline reveal-up" style="--d:0ms">Powerful features to keep you learning daily</h1>
+      <p class="sub reveal-up" style="--d:120ms">From goal setting and XP rewards to smart tips and progress insights — everything is designed to build consistent learning habits.</p>
+      <div class="hero-buttons reveal-up" style="--d:240ms">
+        <a href="goals.html" class="btn btn-primary">Start a Goal</a>
+        <a href="#grid" class="btn btn-secondary">Explore Features</a>
+      </div>
+    </div>
+    <div class="hero-blob hero-blob-1" aria-hidden="true"></div>
+    <div class="hero-blob hero-blob-2" aria-hidden="true"></div>
+  </section>
+
+  <!-- Badges Marquee -->
+  <section style="padding: 0 0 24px;">
+    <div class="container">
+      <div class="marquee">
+        <div class="marquee-track" aria-hidden="true">
+          <span class="badge">🎯 Daily Goals</span>
+          <span class="badge">🔥 Streaks</span>
+          <span class="badge">🏆 Badges</span>
+          <span class="badge">📈 Progress</span>
+          <span class="badge">💡 Smart Tips</span>
+          <span class="badge">⚡ XP Rewards</span>
+          <span class="badge">🔔 Reminders</span>
+          <span class="badge">🧠 AI Suggestions</span>
+          <span class="badge">🎯 Daily Goals</span>
+          <span class="badge">🔥 Streaks</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Grid -->
+  <section id="grid" style="padding: 20px 0 70px;">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">What you can do</h2>
+        <p class="section-subtitle">Everything you need to plan, execute, and track your learning journey.</p>
+      </div>
+      <div class="feature-grid">
+        <div class="f-card reveal-up" style="--d:0ms">
+          <div class="f-icon">🎯</div>
+          <div class="f-title">Set clear goals</div>
+          <div class="f-desc">Choose a skill, difficulty, deadline, and frequency with guided UI.</div>
+        </div>
+        <div class="f-card reveal-up" style="--d:80ms">
+          <div class="f-icon">⚡</div>
+          <div class="f-title">Earn XP</div>
+          <div class="f-desc">Complete goals to collect XP with adaptive rewards.</div>
+        </div>
+        <div class="f-card reveal-up" style="--d:160ms">
+          <div class="f-icon">🔥</div>
+          <div class="f-title">Maintain streaks</div>
+          <div class="f-desc">Stay consistent and keep your streak alive with nudges.</div>
+        </div>
+        <div class="f-card reveal-up" style="--d:240ms">
+          <div class="f-icon">🏆</div>
+          <div class="f-title">Unlock badges</div>
+          <div class="f-desc">Celebrate milestones with collectible badges and levels.</div>
+        </div>
+        <div class="f-card reveal-up" style="--d:320ms">
+          <div class="f-icon">📊</div>
+          <div class="f-title">Visual progress</div>
+          <div class="f-desc">Charts and stats make your improvement visible and motivating.</div>
+        </div>
+        <div class="f-card reveal-up" style="--d:400ms">
+          <div class="f-icon">🧠</div>
+          <div class="f-title">Smart suggestions</div>
+          <div class="f-desc">Quick chips to auto-fill goals based on your activity.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Comparison / Why SkillUp -->
+  <section style="padding: 10px 0 70px;">
+    <div class="container compare">
+      <div class="c-card reveal-up" style="--d:0ms">
+        <div class="c-title">Traditional trackers</div>
+        <ul class="c-list">
+          <li>❌ Boring to-do lists</li>
+          <li>❌ No encouragement to be consistent</li>
+          <li>❌ Hard to visualize progress</li>
+        </ul>
+      </div>
+      <div class="c-card reveal-up" style="--d:120ms">
+        <div class="c-title">SkillUp experience</div>
+        <ul class="c-list">
+          <li>✅ Gamified with XP, badges, and streaks</li>
+          <li>✅ Delightful micro-interactions</li>
+          <li>✅ Clear stats to keep you motivated</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-band">
+    <div class="container">
+      <div class="card">
+        <h3 style="margin:0 0 6px;">Ready to try the features?</h3>
+        <p style="margin:0 0 14px; opacity:.9;">Jump into the Goals page and create your first goal.</p>
+        <div>
+          <a href="goals.html" class="btn btn-primary">Start Now</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>

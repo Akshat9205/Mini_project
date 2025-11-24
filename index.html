@@ -25,10 +25,9 @@
             </button>
             <ul class="nav-links">
                 <li><a href="#home">Home</a></li>
-                <li><a href="#features">Features</a></li>
+                <li><a href="features.html">Features</a></li>
+                <li><a href="about.html">About Us</a></li>
                 <li><a href="contact.html" id="contact-nav">Contact Us</a></li>
-                <li><a href="#gamification">Gamification</a></li>
-                <li><a href="#impact">Impact</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle">👤</a>
                     <div class="dropdown-menu">
@@ -56,7 +55,7 @@
                     </div>
                     <div class="hero-buttons reveal-up" style="--d:360ms">
                         <a href="goals.html" class="btn btn-primary">Get Started</a>
-                        <a href="#features" class="btn btn-secondary">Explore Features</a>
+                        <a href="features.html" class="btn btn-secondary">Explore Features</a>
                     </div>
                 </div>
                 <div class="hero-right">
@@ -225,31 +224,7 @@
         </div>
     </section>
 
-    <!-- Impact Section -->
-    <section class="impact" id="impact">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title" style="color: white;">Why It Matters</h2>
-            </div>
-            <div class="impact-content">
-                <div class="impact-text">
-                    <p style="font-size: 1.3rem; margin-bottom: 2rem;">Students will track skills like a game — turning boring learning into fun growth. It's like Duolingo for Skill Development.</p>
-                </div>
-                <div class="before-after">
-                    <div class="before">
-                        <h4>Before</h4>
-                        <div style="font-size: 4rem; margin-bottom: 1rem;">😞</div>
-                        <p>Unmotivated student with unfinished goals</p>
-                    </div>
-                    <div class="after">
-                        <h4>After</h4>
-                        <div style="font-size: 4rem; margin-bottom: 1rem;">🚀</div>
-                        <p>Motivated learner leveling up daily</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    
 
     <!-- Call to Action Section -->
     <section class="cta" id="cta">
@@ -264,46 +239,74 @@
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="site-footer">
+    <!-- Newsletter band -->
+    <section class="newsletter-band">
         <div class="container">
-            <div class="footer-grid">
-                <div class="footer-brand">
-                    <div class="brand">SkillUp</div>
-                    <p class="brand-desc">Gamify your learning. Track goals, earn rewards, and grow every day.</p>
-                    <div class="footer-social">
-                        <a href="#" aria-label="Email">📧</a>
-                        <a href="#" aria-label="Twitter">🐦</a>
-                        <a href="#" aria-label="LinkedIn">💼</a>
-                        <a href="#" aria-label="Instagram">📸</a>
+            <h2 class="title">Subscribe to our newsletter</h2>
+            <p class="sub">Sign up today and get product updates, tips, and early access invites.</p>
+            <form class="newsletter-form-wide" onsubmit="event.preventDefault();">
+                <input type="email" placeholder="Enter your email address" required>
+                <button type="submit">Get started</button>
+            </form>
+            <div class="helpers">
+                <span>Our experts are ready to help</span>
+                <div class="mini-avatars" aria-hidden="true">
+                    <img src="https://i.pravatar.cc/40?img=1" alt=""/>
+                    <img src="https://i.pravatar.cc/40?img=2" alt=""/>
+                    <img src="https://i.pravatar.cc/40?img=3" alt=""/>
+                    <img src="https://i.pravatar.cc/40?img=4" alt=""/>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Promo card overlapping footer -->
+    <div class="promo-wrap">
+        <div class="container">
+            <div class="promo-card">
+                <div>
+                    <h3>Experience superior goal tracking</h3>
+                    <p>Make learning fun with XP, streaks, and smart insights.</p>
+                    <a class="btn" href="goals.html">Get started</a>
+                </div>
+                <div aria-hidden="true" style="width:280px; aspect-ratio:1.6/1; background: radial-gradient(120% 120% at 80% 10%, rgba(255,255,255,0.18), transparent 60%); border-radius: 16px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modern Footer -->
+    <footer class="site-footer modern">
+        <div class="container">
+            <div class="footer-modern-grid">
+                <div>
+                    <div class="footer-brandline">✨ SkillUp</div>
+                    <div class="footer-address">
+                        123 Learning Ave<br/>Suite 100<br/>New Delhi, India
+                        <div style="margin-top:8px;">Phone: +91-0000-000000<br/>Email: support@skillup.example</div>
                     </div>
                 </div>
-                <div class="footer-links">
-                    <h4>Product</h4>
-                    <a href="#features">Features</a>
+                <div class="footer-col">
+                    <h5>Quick links</h5>
+                    <a href="features.html">Features</a>
                     <a href="#gamification">Gamification</a>
-                    <a href="contact.html" id="contact-footer">Contact Us</a>
-                    <a href="#cta">Get Started</a>
+                    <a href="about.html">About us</a>
+                    <a href="contact.html">Contact us</a>
                 </div>
-                <div class="footer-links">
-                    <h4>Resources</h4>
-                    <a href="#problem">Why SkillUp</a>
-                    <a href="#impact">Impact</a>
-                    <a href="#">Community</a>
-                    <a href="#">Support</a>
+                <div class="footer-col">
+                    <h5>Social</h5>
+                    <a href="#">Twitter</a>
+                    <a href="#">Instagram</a>
+                    <a href="#">LinkedIn</a>
+                    <a href="#">YouTube</a>
                 </div>
-                <div class="newsletter">
-                    <h4>Stay in the loop</h4>
-                    <p>Get updates on new features and tips.</p>
-                    <form class="newsletter-form" onsubmit="event.preventDefault();">
-                        <input type="email" placeholder="Your email" required>
-                        <button type="submit" class="btn btn-primary">Subscribe</button>
-                    </form>
+                <div class="footer-col">
+                    <h5>Legal</h5>
+                    <a href="#">Terms of service</a>
+                    <a href="#">Privacy policy</a>
+                    <a href="#">Cookie policy</a>
                 </div>
             </div>
-            <div class="footer-bottom">
-                <p>&copy; 2025 SkillUp Tracker • Built with ❤️ by Team SkillUp</p>
-            </div>
+            <div class="footer-copy">&copy; 2025 SkillUp. All rights reserved.</div>
         </div>
     </footer>
 

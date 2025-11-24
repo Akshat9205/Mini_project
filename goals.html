@@ -13,7 +13,6 @@
     <nav class="navbar">
         <div class="container">
             <div class="logo">SkillUp</div>
-            <button class="theme-toggle" id="theme-toggle-goals" aria-label="Toggle dark mode">🌙</button>
             <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
                 <span class="bar"></span>
                 <span class="bar"></span>
@@ -21,10 +20,8 @@
             </button>
             <ul class="nav-links">
                 <li><a href="index.html">Home</a></li>
-                <li><a href="index.html#features">Features</a></li>
-                <li><a href="index.html#ai">AI Power</a></li>
-                <li><a href="index.html#gamification">Gamification</a></li>
-                <li><a href="index.html#impact">Impact</a></li>
+                <li><a href="features.html">Features</a></li>
+                <li><a href="about.html">About Us</a></li>
                 <li class="dropdown">
                     <a href="profile.html" class="dropdown-toggle">👤 Profile</a>
                 </li>
@@ -45,7 +42,7 @@
 
             <div class="goals-content">
                 <!-- Goals Form Section -->
-                <div class="goals-form-section">
+                <div class="goals-form-section reveal-up">
                     <h2>Create New Goal</h2>
 
                     <div id="goal-message"></div>
@@ -112,8 +109,41 @@
                         </div>
 
                         <div class="form-group">
+                            <label>Frequency</label>
+                            <div class="freq-toggle" role="tablist" aria-label="Goal frequency">
+                                <button type="button" class="pill active" data-frequency="daily" aria-selected="true">Daily</button>
+                                <button type="button" class="pill" data-frequency="weekly" aria-selected="false">Weekly</button>
+                            </div>
+                            <input type="hidden" id="goal-frequency" name="goal-frequency" value="daily">
+                        </div>
+
+                        <div class="form-group">
                             <label for="goal-deadline">Target Deadline *</label>
                             <input type="date" id="goal-deadline" name="goal-deadline" required>
+                        </div>
+
+                        <div class="form-group">
+                            <button type="button" class="btn btn-ghost more-options" id="more-options-btn" aria-expanded="false">More Options</button>
+                            <div class="more-panel" id="more-panel" hidden>
+                                <div class="form-group">
+                                    <label>Pick an Emoji</label>
+                                    <div class="emoji-grid" id="emoji-grid" aria-label="Choose an emoji">
+                                        <button type="button" class="emoji" data-emoji="🚀">🚀</button>
+                                        <button type="button" class="emoji" data-emoji="🎯">🎯</button>
+                                        <button type="button" class="emoji" data-emoji="🔥">🔥</button>
+                                        <button type="button" class="emoji" data-emoji="💻">💻</button>
+                                        <button type="button" class="emoji" data-emoji="📚">📚</button>
+                                        <button type="button" class="emoji" data-emoji="🧠">🧠</button>
+                                        <button type="button" class="emoji" data-emoji="🏆">🏆</button>
+                                        <button type="button" class="emoji" data-emoji="⚡">⚡</button>
+                                    </div>
+                                    <input type="hidden" id="goal-emoji" name="goal-emoji" value="">
+                                </div>
+                                <div class="form-group">
+                                    <label for="goal-notes">Notes (optional)</label>
+                                    <textarea id="goal-notes" name="goal-notes" placeholder="Any extra details or milestones..."></textarea>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="form-group">
@@ -125,15 +155,25 @@
                         </div>
 
                         <div class="form-actions">
-                            <button type="button" class="btn-cancel" onclick="cancelGoal()">Cancel</button>
+                            <button type="button" class="btn btn-secondary" onclick="cancelGoal()">Cancel</button>
                             <button type="submit" class="btn btn-primary">🚀 Set Goal & Start!</button>
                         </div>
                     </form>
                 </div>
 
                 <!-- Goals Preview Section -->
-                <div class="goals-preview-section">
+                <div class="goals-preview-section reveal-up">
                     <h2>Your Goals Dashboard</h2>
+
+                    <div class="smart-suggestions glass">
+                        <h3>💡 Based on your progress</h3>
+                        <p class="suggest-sub">Here are some quick ideas to auto-fill:</p>
+                        <div class="chips" id="suggestion-chips">
+                            <button type="button" class="chip" data-title="Solve 2 DSA problems" data-category="coding" data-difficulty="medium" data-frequency="daily" data-emoji="💻">💻 2 DSA/day</button>
+                            <button type="button" class="chip" data-title="Read 10 pages" data-category="writing" data-difficulty="easy" data-frequency="daily" data-emoji="📚">📚 Read 10 pages</button>
+                            <button type="button" class="chip" data-title="Practice speaking 10 min" data-category="communication" data-difficulty="medium" data-frequency="weekly" data-emoji="🗣️">🗣️ 10-min speaking</button>
+                        </div>
+                    </div>
 
                     <div class="stats-overview">
                         <div class="stat-card">
@@ -156,8 +196,8 @@
                     </div>
 
                     <div class="recent-goals">
-                        <h3>📋 Recent Goals</h3>
-                        <div id="recent-goals-list">
+                        <h3>📋 Active Goals</h3>
+                        <div id="recent-goals-list" class="goal-grid">
                             <div class="no-goals">
                                 <div style="font-size: 3rem; margin-bottom: 1rem;">🎯</div>
                                 <h4>No goals set yet!</h4>

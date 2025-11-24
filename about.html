@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Us • SkillUp</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Page-specific enhancements (kept scoped) */
+    .about-hero { padding: 140px 0 80px; position: relative; overflow: hidden; }
+    .about-hero .headline { font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; margin: 0 0 12px; }
+    .about-hero .sub { color: rgba(16,24,40,0.7); max-width: 800px; }
+    .about-hero .spark { display:inline-block; filter: drop-shadow(0 10px 24px rgba(106,17,203,0.35)); animation: floatY 6s ease-in-out infinite; }
+
+    .about-panels { display:grid; grid-template-columns: 1.1fr 0.9fr; gap: 28px; }
+    .glass-card { background: rgba(255,255,255,0.7); border:1px solid rgba(255,255,255,0.8); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: 20px; box-shadow: var(--shadow-md); padding: 22px; }
+
+    .values { display:grid; grid-template-columns: repeat(3,1fr); gap:16px; margin-top: 14px; }
+    .value { background: var(--gray-color); border-radius: 14px; padding: 16px; transition: transform .25s ease, box-shadow .25s ease; }
+    .value:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+    .value .icon { font-size: 1.6rem; }
+
+    .timeline { position: relative; padding-left: 22px; }
+    .timeline::before { content:""; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: linear-gradient(180deg, var(--primary-color), var(--secondary-color)); opacity: .5; }
+    .tl-item { position: relative; margin: 16px 0; }
+    .tl-item::before { content:""; position: absolute; left: -2px; top: 6px; width: 12px; height: 12px; border-radius: 50%; background: var(--primary-color); box-shadow: 0 0 0 4px rgba(106,17,203,0.18); }
+    .tl-card { background: #fff; border:1px solid #eef0f6; border-radius: 14px; padding: 12px 14px; box-shadow: var(--shadow-md); }
+
+    .about-stats { display:grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-top: 24px; }
+    .about-stat { background: var(--gray-color); border-radius: 14px; padding: 16px; text-align: center; transition: transform .25s ease; }
+    .about-stat:hover { transform: translateY(-4px); }
+    .about-stat .num { font-weight: 800; font-size: 1.6rem; color: var(--primary-color); }
+
+    .team { display:grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+    .member { background:#fff; border:1px solid #eef0f6; border-radius: 16px; text-align:center; padding: 18px; box-shadow: var(--shadow-md); transition: transform .2s ease, box-shadow .2s ease; }
+    .member:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+    .avatar { width: 72px; height: 72px; border-radius: 50%; display:inline-grid; place-content:center; margin: 6px auto 10px; font-size: 2rem; background: var(--gray-color); }
+
+    .cta-band { padding: 60px 0; text-align: center; }
+    .cta-band .card { display:inline-block; background: #111; color: #fff; border-radius: 16px; padding: 22px 26px; box-shadow: 0 16px 42px rgba(0,0,0,0.2); }
+
+    @keyframes floatY { 0%,100% { transform: translateY(0);} 50% { transform: translateY(-8px);} }
+
+    @media (max-width: 900px){ .about-panels { grid-template-columns: 1fr; } .values { grid-template-columns: 1fr; } .about-stats { grid-template-columns: repeat(2,1fr); } .team { grid-template-columns: repeat(2,1fr);} }
+    @media (max-width: 520px){ .about-stats { grid-template-columns: 1fr; } .team { grid-template-columns: 1fr;} }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="container">
+      <div class="logo">SkillUp</div>
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="index.html#home">Home</a></li>
+        <li><a href="features.html">Features</a></li>
+        <li><a href="about.html" aria-current="page">About Us</a></li>
+        <li><a href="contact.html" id="contact-nav">Contact Us</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle">👤</a>
+          <div class="dropdown-menu">
+            <a href="login.html" class="dropdown-item" id="login-btn">🔐 Login</a>
+            <a href="goals.html" class="dropdown-item">🎯 Set Goal</a>
+            <a href="profile.html" class="dropdown-item">👤 My Profile</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="about-hero">
+    <div class="container">
+      <div class="hero-content">
+        <h1 class="headline">We’re building the future of learning <span class="spark">✨</span></h1>
+        <p class="sub">SkillUp turns goals into growth through gamification, smart insights, and delightful design. Our mission is to help students build powerful habits and master skills with joy.</p>
+      </div>
+    </div>
+    <div class="hero-blob hero-blob-1" aria-hidden="true"></div>
+    <div class="hero-blob hero-blob-2" aria-hidden="true"></div>
+  </section>
+
+  <!-- Panels: Mission + Timeline -->
+  <section style="padding: 20px 0 60px;">
+    <div class="container about-panels">
+      <div class="glass-card">
+        <h3 style="margin:0 0 8px;">Our Mission</h3>
+        <p style="margin:0 0 10px; color: var(--text-color);">Make skill development consistent, measurable, and fun—so every learner can reach their potential.</p>
+
+        <div class="values">
+          <div class="value">
+            <div class="icon">🎯</div>
+            <strong>Clarity</strong>
+            <p>Define goals that are simple, specific, and actionable.</p>
+          </div>
+          <div class="value">
+            <div class="icon">🔥</div>
+            <strong>Consistency</strong>
+            <p>Build daily momentum with streaks and friendly nudges.</p>
+          </div>
+          <div class="value">
+            <div class="icon">🏆</div>
+            <strong>Progress</strong>
+            <p>See your growth with XP, badges, and visual stats.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass-card">
+        <h3 style="margin:0 0 8px;">Our Journey</h3>
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-card">
+              <strong>2025 • Beta Launch</strong>
+              <p>Opened our early beta with goal tracking, streaks, and progress analytics.</p>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-card">
+              <strong>Next • AI Suggestions</strong>
+              <p>Personalized goal ideas, adaptive XP, and predictive reminders.</p>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-card">
+              <strong>Future • Community</strong>
+              <p>Leaderboards, groups, and collaboration to learn together.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section style="padding: 10px 0 10px;">
+    <div class="container about-stats">
+      <div class="about-stat"><div class="num">12k+</div><div>Learners</div></div>
+      <div class="about-stat"><div class="num">350+</div><div>Daily Goals</div></div>
+      <div class="about-stat"><div class="num">98</div><div>Max Streak</div></div>
+      <div class="about-stat"><div class="num">125k</div><div>XP Earned</div></div>
+    </div>
+  </section>
+
+  <!-- Team -->
+  <section style="padding: 30px 0 70px;">
+    <div class="container">
+      <h2 class="section-title">Meet the Team</h2>
+      <div class="team">
+        <div class="member">
+          <div class="avatar">👩🏻‍💻</div>
+          <strong>Product Design</strong>
+          <p>Crafting delightful learning experiences.</p>
+        </div>
+        <div class="member">
+          <div class="avatar">👨🏽‍💻</div>
+          <strong>Frontend Engineering</strong>
+          <p>Fast, responsive, and accessible UI.</p>
+        </div>
+        <div class="member">
+          <div class="avatar">🧠</div>
+          <strong>AI/ML</strong>
+          <p>Smart suggestions and adaptive XP.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-band">
+    <div class="container">
+      <div class="card">
+        <h3 style="margin:0 0 6px;">Ready to level up with us?</h3>
+        <p style="margin:0 0 14px; opacity:.9;">Join the beta and help shape the future of learning.</p>
+        <div>
+          <a href="goals.html" class="btn btn-primary">Start Setting Goals</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>
