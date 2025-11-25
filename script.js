@@ -229,6 +229,18 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.removeItem('skillup_theme');
     applyTheme('light');
 
+    // Auth guard: require login before accessing goals.html
+    document.querySelectorAll('a[href$="goals.html"]').forEach(a => {
+        a.addEventListener('click', (e) => {
+            const userData = localStorage.getItem('skillup_user');
+            if (!userData) {
+                e.preventDefault();
+                localStorage.setItem('post_login_redirect', 'goals.html');
+                window.location.href = 'login.html';
+            }
+        });
+    });
+
     // Dropdown toggle
     const dropdownToggleEl = document.querySelector('.dropdown-toggle');
     if (dropdownToggleEl) dropdownToggleEl.addEventListener('click', toggleDropdown);
@@ -310,8 +322,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 };
                 localStorage.setItem('skillup_profile', JSON.stringify(initialProfile));
 
-                // Redirect to profile page
-                window.location.href = 'profile.html';
+                // Redirect to intended destination (default: goals)
+                const redirectTo = localStorage.getItem('post_login_redirect') || 'goals.html';
+                localStorage.removeItem('post_login_redirect');
+                window.location.href = redirectTo;
             } else {
                 msgEl.innerHTML = `<div class="message error">${result.error || 'Signup failed. Try again.'}</div>`;
             }
@@ -373,8 +387,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 currentUser = result.user;
                 localStorage.setItem('skillup_user', JSON.stringify(currentUser));
                 updateNavbarForLoggedInUser();
-                // Redirect to profile page
-                window.location.href = 'profile.html';
+                // Redirect to intended destination (default: goals)
+                const redirectTo = localStorage.getItem('post_login_redirect') || 'goals.html';
+                localStorage.removeItem('post_login_redirect');
+                window.location.href = redirectTo;
             } else {
                 showMessage('login-modal', result.error, 'error');
             }

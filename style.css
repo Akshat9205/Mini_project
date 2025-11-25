@@ -490,6 +490,17 @@
             text-align: center;
         }
 
+        /* AI section banner image */
+        .ai-heading-img {
+            width: 100%;
+            max-height: 280px;
+            object-fit: cover;
+            border-radius: 16px;
+            box-shadow: 0 16px 42px rgba(0,0,0,0.25);
+            margin: 0 auto 10px;
+            display: block;
+        }
+
         .ai-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -510,6 +521,34 @@
         .ai-card:hover {
             transform: translateY(-10px);
         }
+
+        /* Ensure AI card images are neat and not overflowing */
+        .ai-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 12px;
+            display: block;
+            margin-bottom: 14px;
+            box-shadow: 0 8px 22px rgba(0,0,0,0.18);
+        }
+
+        .ai-card h3 {
+            margin: 6px 0 10px;
+            font-size: 1.2rem;
+            color: #fff;
+        }
+
+        .ai-card p { color: rgba(255,255,255,0.92); }
+
+        .ai-list {
+            text-align: left;
+            margin: 10px 0 0;
+            padding-left: 18px;
+            color: rgba(255,255,255,0.92);
+        }
+
+        .ai-list li { margin: 6px 0; }
 
         .ai-icon {
             font-size: 3rem;
@@ -899,6 +938,12 @@
             color: var(--primary-color);
             transform: translateX(5px);
         }
+
+        /* Match button dropdown-items with anchor styles */
+        button.dropdown-item { background: none; border: 0; width: 100%; text-align: left; cursor: pointer; font: inherit; }
+
+        /* Hidden by default, shown after login via script.js */
+        #dashboard-btn, #logout-btn { display: none; }
 
         .dropdown-item:first-child {
             border-bottom: 1px solid rgba(0, 0, 0, 0.1);
