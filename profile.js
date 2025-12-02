@@ -97,7 +97,7 @@ function loadProfileData() {
     document.getElementById('display-email').textContent = profileData.email || cu.email || 'your.email@example.com';
     document.getElementById('display-phone').textContent = profileData.phone || 'Not provided';
     document.getElementById('display-location').textContent = profileData.location || 'Not provided';
-    document.getElementById('display-bio').textContent = profileData.bio || 'No bio added yet';
+    document.getElementById('display-bio').textContent = (profileData.bio !== undefined && profileData.bio !== null) ? profileData.bio : '';
     document.getElementById('display-website').textContent = profileData.website || 'Not provided';
 
     // Settings
@@ -289,9 +289,6 @@ function toggleEditMode() {
             </svg>
             Edit Profile
         `;
-
-        // Hide action buttons
-        document.querySelector('.profile-actions').style.display = 'none';
 
         // Cancel any unsaved changes
         loadProfileData();

@@ -8,12 +8,6 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-        <div id="splash">
-            <div class="splash-content">
-                <div class="splash-text">SkillUp</div>
-                <div class="splash-avatar" aria-hidden="true">👨‍💻</div>
-            </div>
-        </div>
     <!-- Navigation -->
     <nav class="navbar">
         <div class="container">
@@ -499,6 +493,36 @@
             <div class="form-options" style="justify-content: center; margin-top: 20px;">
                 <p>Don't have an account? <a href="login.html">Sign up here</a></p>
             </div>
+        </div>
+    </div>
+
+    <!-- Chatbot Widget -->
+    <button id="chatbot-toggle" class="chatbot-toggle" aria-label="Open chat">💬</button>
+    <div id="chatbot-panel" class="chatbot-panel" aria-hidden="true">
+        <div class="chatbot-header">
+            <span>SkillUp Assistant</span>
+            <button id="chatbot-close" class="chatbot-close" aria-label="Close chat">×</button>
+        </div>
+        <div class="chatbot-body">
+            <div id="chatbot-messages" class="chatbot-messages"></div>
+            <div id="chatbot-starters" class="chatbot-starters"></div>
+        </div>
+        <div class="chatbot-input">
+            <input id="chatbot-input" type="text" placeholder="Type your message..." />
+            <button id="chatbot-send" class="btn btn-primary">Send</button>
+        </div>
+    </div>
+
+    <!-- Streak Calendar Widget -->
+    <div id="streak-widget" class="streak-widget" aria-label="Streak calendar">
+        <div class="streak-header">
+            <span>Streak</span>
+            <span id="streak-count" class="streak-count">0🔥</span>
+        </div>
+        <div id="streak-grid" class="streak-grid" aria-hidden="false"></div>
+        <div class="streak-legend">
+            <span><span class="dot green"></span> Done</span>
+            <span><span class="dot red"></span> Missed</span>
         </div>
     </div>
 

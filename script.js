@@ -571,4 +571,150 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // Chatbot widget logic
+    const cbToggle = document.getElementById('chatbot-toggle');
+    const cbPanel = document.getElementById('chatbot-panel');
+    const cbClose = document.getElementById('chatbot-close');
+    const cbMsgs = document.getElementById('chatbot-messages');
+    const cbStarters = document.getElementById('chatbot-starters');
+    const cbInput = document.getElementById('chatbot-input');
+    const cbSend = document.getElementById('chatbot-send');
+
+    const starters = [
+        'How do I get started?',
+        'What features does SkillUp have?',
+        'How to track my daily goals?',
+        'How do streaks and XP work?'
+    ];
+
+    const pickRandom = (arr, n) => {
+        const copy = [...arr];
+        const out = [];
+        while (copy.length && out.length < n) {
+            const i = Math.floor(Math.random() * copy.length);
+            out.push(copy.splice(i, 1)[0]);
+        }
+        return out;
+    };
+
+    const addMessage = (text, who = 'bot') => {
+        if (!cbMsgs) return;
+        const el = document.createElement('div');
+        el.className = `chat-msg ${who}`;
+        el.textContent = text;
+        cbMsgs.appendChild(el);
+        cbMsgs.scrollTop = cbMsgs.scrollHeight;
+    };
+
+    const botReply = (text) => {
+        const t = text.toLowerCase();
+        if (t.includes('start')) return 'Click Get Started or create an account. Then set your first goal in the Dashboard and you will start earning XP!';
+        if (t.includes('feature')) return 'Core features: Daily Goals, XP, Streaks, Badges and a Leaderboard. Explore the Features page for details.';
+        if (t.includes('goal')) return 'Open Goals and add a new goal with a title and target. Mark it complete daily to maintain streaks.';
+        if (t.includes('streak') || t.includes('xp')) return 'Each completed goal gives XP. Complete goals daily to build streaks and unlock badges!';
+        return "Thanks for your message! Our team will get back soon. Meanwhile, check Features or try the Demo.";
+    };
+
+    const renderStarters = () => {
+        if (!cbStarters) return;
+        cbStarters.innerHTML = '';
+        pickRandom(starters, 4).forEach(q => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.textContent = q;
+            btn.addEventListener('click', () => {
+                handleSend(q);
+            });
+            cbStarters.appendChild(btn);
+        });
+    };
+
+    const openChat = () => {
+        if (!cbPanel) return;
+        cbPanel.classList.add('open');
+        cbPanel.setAttribute('aria-hidden', 'false');
+        if (cbMsgs && !cbMsgs.dataset.inited) {
+            addMessage('Hi! I\'m your SkillUp assistant. How can I help?');
+            cbMsgs.dataset.inited = '1';
+            renderStarters();
+        }
+    };
+
+    const closeChat = () => {
+        if (!cbPanel) return;
+        cbPanel.classList.remove('open');
+        cbPanel.setAttribute('aria-hidden', 'true');
+    };
+
+    const handleSend = (text) => {
+        const msg = (text ?? cbInput?.value ?? '').trim();
+        if (!msg) return;
+        addMessage(msg, 'user');
+        if (cbInput) cbInput.value = '';
+        setTimeout(() => addMessage(botReply(msg), 'bot'), 350);
+    };
+
+    if (cbToggle) cbToggle.addEventListener('click', openChat);
+    if (cbClose) cbClose.addEventListener('click', closeChat);
+    if (cbSend) cbSend.addEventListener('click', () => handleSend());
+    if (cbInput) cbInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleSend(); });
+
+    // Streak calendar widget (home page)
+    const streakGrid = document.getElementById('streak-grid');
+    const streakCountEl = document.getElementById('streak-count');
+
+    const fmtDate = (d) => d.toLocaleDateString('en-CA'); // YYYY-MM-DD
+
+    const getUserCompletedDates = () => {
+        try {
+            const all = JSON.parse(localStorage.getItem('skillup_goals') || '[]');
+            if (!currentUser || !currentUser.id) return new Set();
+            const mine = all.filter(g => g.userId === currentUser.id && g.completed && g.completedDate);
+            return new Set(mine.map(g => (new Date(g.completedDate)).toLocaleDateString('en-CA')));
+        } catch (_) { return new Set(); }
+    };
+
+    const calcCurrentStreak = (doneDates) => {
+        // consecutive days up to today
+        let streak = 0;
+        const today = new Date();
+        for (let i=0; i<365; i++) {
+            const d = new Date(today);
+            d.setDate(today.getDate() - i);
+            if (doneDates.has(fmtDate(d))) streak++;
+            else break;
+        }
+        return streak;
+    };
+
+    const renderStreak = () => {
+        if (!streakGrid) return;
+        const doneDates = getUserCompletedDates();
+        const days = 35; // last 5 weeks
+        const today = new Date();
+        const cells = [];
+        for (let i = days - 1; i >= 0; i--) {
+            const d = new Date(today);
+            d.setDate(today.getDate() - i);
+            const key = fmtDate(d);
+            const done = doneDates.has(key);
+            cells.push({ key, day: d.getDate(), done });
+        }
+
+        streakGrid.innerHTML = cells.map(c => `
+            <div class="streak-cell ${c.done ? 'done' : 'missed'}" title="${c.key}">
+                <span class="tick">${c.done ? '✓' : '✗'}</span>
+            </div>
+        `).join('');
+
+        if (streakCountEl) {
+            const s = calcCurrentStreak(doneDates);
+            streakCountEl.textContent = `${s}🔥`;
+        }
+    };
+
+    // initial render and listeners
+    renderStreak();
+    window.addEventListener('goals:updated', renderStreak);
 });

@@ -6,6 +6,9 @@
 function initLoginPage() {
     checkAuthState();
     setupEventListeners();
+    // Initialize captchas on load
+    initCaptcha('login');
+    initCaptcha('signup');
 }
 
 // Password strength helper
@@ -35,8 +38,10 @@ function setupEventListeners() {
 
             if (targetForm === 'login') {
                 showLogin();
+                initCaptcha('login');
             } else {
                 showSignup();
+                initCaptcha('signup');
             }
         });
     });
@@ -93,6 +98,39 @@ function setupEventListeners() {
     }
 }
 
+// Simple math captcha helpers
+function generateCaptchaQA() {
+    const a = Math.floor(1 + Math.random() * 9);
+    const b = Math.floor(1 + Math.random() * 9);
+    // Randomize + or -, ensure non-negative
+    const usePlus = Math.random() < 0.5 || a < b;
+    const question = usePlus ? `${a} + ${b}` : `${a} - ${b}`;
+    const answer = usePlus ? a + b : a - b;
+    return { question, answer: String(answer) };
+}
+
+function initCaptcha(type) {
+    if (type === 'login') {
+        const qe = document.getElementById('login-captcha-question');
+        if (qe) {
+            const qa = generateCaptchaQA();
+            qe.textContent = qa.question;
+            qe.dataset.answer = qa.answer;
+            const inp = document.getElementById('login-captcha');
+            if (inp) inp.value = '';
+        }
+    } else if (type === 'signup') {
+        const qe = document.getElementById('signup-captcha-question');
+        if (qe) {
+            const qa = generateCaptchaQA();
+            qe.textContent = qa.question;
+            qe.dataset.answer = qa.answer;
+            const inp = document.getElementById('signup-captcha');
+            if (inp) inp.value = '';
+        }
+    }
+}
+
 // Show login form
 function showLogin() {
     document.getElementById('login-form-container').style.display = 'block';
@@ -127,10 +165,19 @@ async function handleLogin(e) {
 
     const email = document.getElementById('login-email').value.trim().toLowerCase();
     const password = document.getElementById('login-password').value.trim();
+    const captchaInput = (document.getElementById('login-captcha')?.value || '').trim();
+    const captchaAnswer = document.getElementById('login-captcha-question')?.dataset?.answer || '';
 
     // Strong password enforcement
     if (!isStrongPassword(password)) {
         showMessage('login', 'Please enter a strong password (8+ chars, uppercase, lowercase, number, symbol).', 'error');
+        return;
+    }
+
+    // Captcha validation
+    if (captchaInput === '' || captchaInput !== String(captchaAnswer)) {
+        showMessage('login', 'Captcha incorrect. Please try again.', 'error');
+        initCaptcha('login');
         return;
     }
 
@@ -144,6 +191,7 @@ async function handleLogin(e) {
         startOtpFlow(result.user);
     } else {
         showMessage('login', result.error, 'error');
+        initCaptcha('login');
     }
 }
 
@@ -278,6 +326,8 @@ async function handleSignup(e) {
     const password = document.getElementById('signup-password').value.trim();
     const confirmPassword = document.getElementById('signup-confirm-password').value.trim();
     const termsAgree = document.getElementById('terms-agree').checked;
+    const captchaInput = (document.getElementById('signup-captcha')?.value || '').trim();
+    const captchaAnswer = document.getElementById('signup-captcha-question')?.dataset?.answer || '';
 
     // Validation
     if (password !== confirmPassword) {
@@ -300,6 +350,13 @@ async function handleSignup(e) {
         return;
     }
 
+    // Captcha validation
+    if (captchaInput === '' || captchaInput !== String(captchaAnswer)) {
+        showMessage('signup', 'Captcha incorrect. Please try again.', 'error');
+        initCaptcha('signup');
+        return;
+    }
+
     // Clear previous messages
     showMessage('signup', 'Creating account...', 'info');
 
@@ -316,6 +373,7 @@ async function handleSignup(e) {
         }, 1500);
     } else {
         showMessage('signup', result.error, 'error');
+        initCaptcha('signup');
     }
 }
 

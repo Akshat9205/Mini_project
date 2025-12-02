@@ -33,10 +33,17 @@
     <div class="goals-page">
         <div class="goals-container">
             <div class="goals-header">
-                <h1>🎯 Set Your Learning Goal</h1>
-                <p>Define your objectives and start your journey towards mastery. Choose your skill, set your target, and earn XP along the way!</p>
-                <div style="margin-top: 10px; display: flex; gap: 10px; flex-wrap: wrap;">
-                    <button id="reset-goals-btn" class="btn btn-danger" type="button">♻️ Reset My Goals</button>
+                <div class="header-top">
+                    <div class="mascot" aria-hidden="true">🤖</div>
+                    <h1 class="title-anim">Set Your Learning Goals</h1>
+                </div>
+                <p class="subtitle-fade">Plan your journey. Set your targets. Earn XP.</p>
+                <div class="glow-progress" aria-label="session progress">
+                    <div class="glow-fill" id="header-progress" style="width:0%"></div>
+                </div>
+                <div class="float-tooltips" id="float-tooltips" aria-hidden="true"></div>
+                <div style="margin-top: 10px; display: flex; gap: 10px; flex-wrap: wrap; justify-content:center;">
+                    <button id="reset-goals-btn" class="btn btn-danger reset-shake" type="button">♻️ Reset My Goals</button>
                 </div>
             </div>
 
@@ -187,6 +194,26 @@
                         <div class="stat-card">
                             <div class="stat-number" id="total-xp">0</div>
                             <div class="stat-label">Total XP</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card xp-ring-card" aria-label="XP Progress">
+                        <h3 style="margin-bottom:8px; color: var(--text-color); text-align:center;">Level Progress</h3>
+                        <div class="ring" style="--pct:0;">
+                            <svg viewBox="0 0 120 120" width="120" height="120" aria-hidden="true">
+                                <defs>
+                                    <linearGradient id="xpGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" stop-color="#6a11cb"/>
+                                        <stop offset="100%" stop-color="#2575fc"/>
+                                    </linearGradient>
+                                </defs>
+                                <circle class="bg" cx="60" cy="60" r="52"></circle>
+                                <circle class="fg" id="xp-ring" cx="60" cy="60" r="52" stroke="url(#xpGrad)" stroke-dasharray="326.72" stroke-dashoffset="326.72"></circle>
+                            </svg>
+                        </div>
+                        <div style="text-align:center; margin-top:6px;">
+                            <div class="stat-number" id="xp-percent">0%</div>
+                            <div class="stat-label">to next level</div>
                         </div>
                     </div>
 

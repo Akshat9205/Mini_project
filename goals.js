@@ -47,12 +47,13 @@ document.addEventListener('DOMContentLoaded', function() {
         setupButtonInteractions();
         updateStatsDisplay();
         renderRecentGoals();
+        try { window.dispatchEvent(new Event('goals:updated')); } catch(_) {}
         renderChart();
 
         // Reset Goals button
         const resetBtn = document.getElementById('reset-goals-btn');
         if (resetBtn) {
-            resetBtn.addEventListener('click', function() {
+            resetBtn.addEventListener('click', function(e) {
                 if (!currentUser || !currentUser.id) return;
                 if (!confirm('This will remove all your goals. Continue?')) return;
 
@@ -64,7 +65,82 @@ document.addEventListener('DOMContentLoaded', function() {
                 updateStatsDisplay();
                 renderRecentGoals();
                 renderChart();
+                try { window.dispatchEvent(new Event('goals:updated')); } catch(_) {}
+
+                // Confetti burst (emoji-based lightweight)
+                burstConfetti(e);
             });
+        }
+
+        // Header animations
+        animateHeaderIntro();
+        setupTypewriterPlaceholder();
+    }
+
+    // Animate header progress + floating tooltips
+    function animateHeaderIntro() {
+        const fill = document.getElementById('header-progress');
+        if (fill) {
+            const pct = 45 + Math.round(Math.random() * 45); // 45-90%
+            requestAnimationFrame(() => { fill.style.width = pct + '%'; });
+        }
+        const tipsHost = document.getElementById('float-tooltips');
+        if (tipsHost) {
+            const tips = ['Daily Streak +1', 'XP Booster', 'Level-Up Challenge', 'Keep Going!', 'You got this!'];
+            tips.slice(0,3).forEach((t,i) => {
+                const b = document.createElement('div');
+                b.className = 'tooltip-balloon';
+                b.textContent = t;
+                b.style.animationDelay = (i * 0.4) + 's';
+                b.style.left = (40 + i*10) + '%';
+                tipsHost.appendChild(b);
+                setTimeout(()=> b.remove(), 3600 + i*200);
+            });
+        }
+    }
+
+    // Typewriter placeholder for goal title
+    function setupTypewriterPlaceholder() {
+        const input = document.getElementById('goal-title');
+        if (!input) return;
+        const demo = 'e.g., Solve 2 DSA problems daily';
+        let idx = 0; let active = true; let started = false;
+        const tick = () => {
+            if (!active) return;
+            input.setAttribute('placeholder', demo.slice(0, idx));
+            idx = (idx < demo.length) ? idx + 1 : demo.length;
+            if (idx === demo.length) { active = false; return; }
+            setTimeout(tick, 60);
+        };
+        setTimeout(()=>{ if (!started) { started = true; tick(); } }, 400);
+        input.addEventListener('focus', ()=> { active = false; });
+        input.addEventListener('input', ()=> { active = false; });
+    }
+
+    // Emoji confetti burst at click position
+    function burstConfetti(evt) {
+        const emojis = ['🎉','✨','⚡','🏆','🎯'];
+        const root = document.body;
+        const { clientX:x, clientY:y } = evt;
+        for (let i=0;i<16;i++) {
+            const s = document.createElement('span');
+            s.textContent = emojis[i % emojis.length];
+            s.style.position = 'fixed';
+            s.style.left = x + 'px';
+            s.style.top = y + 'px';
+            s.style.zIndex = 9999;
+            s.style.pointerEvents = 'none';
+            s.style.transition = 'transform 900ms ease, opacity 900ms ease';
+            root.appendChild(s);
+            const ang = Math.random()*2*Math.PI;
+            const dist = 60 + Math.random()*80;
+            const tx = Math.cos(ang)*dist;
+            const ty = Math.sin(ang)*dist - 40;
+            requestAnimationFrame(()=>{
+                s.style.transform = `translate(${tx}px, ${ty}px) rotate(${Math.random()*360}deg)`;
+                s.style.opacity = '0';
+            });
+            setTimeout(()=> s.remove(), 950);
         }
     }
 
@@ -330,9 +406,36 @@ document.addEventListener('DOMContentLoaded', function() {
         userStats = { totalGoals, activeGoals, totalXP };
         localStorage.setItem('userStats', JSON.stringify(userStats));
 
-        document.getElementById('total-goals').textContent = totalGoals;
-        document.getElementById('active-goals').textContent = activeGoals;
-        document.getElementById('total-xp').textContent = totalXP;
+        rollNumber(document.getElementById('total-goals'), totalGoals);
+        rollNumber(document.getElementById('active-goals'), activeGoals);
+        rollNumber(document.getElementById('total-xp'), totalXP);
+
+        // Animate XP ring percentage toward next level (per 1000 XP window)
+        const levelWindow = 1000;
+        const pct = Math.round(((totalXP % levelWindow) / levelWindow) * 100);
+        const ring = document.getElementById('xp-ring');
+        const pctEl = document.getElementById('xp-percent');
+        if (ring) {
+            const radius = 52; const circ = 2 * Math.PI * radius;
+            const offset = circ * (1 - pct/100);
+            // smooth update via requestAnimationFrame
+            requestAnimationFrame(()=>{ ring.style.strokeDashoffset = offset; });
+        }
+        if (pctEl) pctEl.textContent = pct + '%';
+    }
+
+    // Number rolling animation
+    function rollNumber(el, target) {
+        if (!el) return; const start = Number(el.textContent.replace(/[^\d]/g,'')) || 0;
+        const dur = 700; const t0 = performance.now();
+        const ease = (p)=> p<0.5? 2*p*p : -1+(4-2*p)*p;
+        const step = (now)=> {
+            const p = Math.min(1, (now - t0)/dur);
+            const val = Math.round(start + (target - start)*ease(p));
+            el.textContent = val;
+            if (p < 1) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
     }
 
     // Render recent goals
@@ -383,13 +486,15 @@ document.addEventListener('DOMContentLoaded', function() {
                   </div>
                   <div class="title">${goal.emoji || ''} ${goal.title}</div>
                   <div class="meta"><span class="chip">${getCategoryIcon(goal.category)} ${goal.category}</span><span class="chip">${goal.frequency || 'daily'}</span></div>
+                  <div class="actions">
+                    <button class="btn-ghost complete-btn" data-goal-id="${goal.id}">${goal.completed ? 'Mark Active' : 'Mark as Done'}</button>
+                  </div>
                 </div>
                 <div class="card-face back">
                   <div style="text-align:center;">
                     <div>${dueText}</div>
                     <div class="meta" style="margin-top:6px;"><span class="chip">${goal.difficulty}</span><span class="chip">${goal.xp} XP</span></div>
                     <div class="actions">
-                      <button class="btn-ghost complete-btn" data-goal-id="${goal.id}">${goal.completed ? 'Mark Active' : 'Mark Done'}</button>
                       <button class="btn-danger delete-btn" data-goal-id="${goal.id}">Delete</button>
                     </div>
                   </div>
@@ -416,9 +521,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 card.style.removeProperty('--ry');
                 card.classList.remove('tilt');
             });
-            card.addEventListener('click', () => {
-                inner.classList.toggle('flipped');
-            });
+            // Disable flip on click as per request
         });
 
         // Complete and delete actions
@@ -439,6 +542,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     renderRecentGoals();
                     renderChart();
                     showMessage(nowCompleted ? `✅ Marked completed: ${g.title}` : `↩️ Marked active: ${g.title}`, 'success');
+                    try { window.dispatchEvent(new Event('goals:updated')); } catch(_) {}
                 }
             });
         });
@@ -454,6 +558,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 renderRecentGoals();
                 renderChart();
                 showMessage('🗑️ Goal deleted', 'success');
+                try { window.dispatchEvent(new Event('goals:updated')); } catch(_) {}
             });
         });
     }
