@@ -28,6 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const emojiGrid = document.getElementById('emoji-grid');
     const goalEmojiInput = document.getElementById('goal-emoji');
     const goalNotesInput = document.getElementById('goal-notes');
+    const goalDurationInput = document.getElementById('goal-duration');
     const suggestionChips = document.getElementById('suggestion-chips');
 
     // Selected values
@@ -49,6 +50,7 @@ document.addEventListener('DOMContentLoaded', function() {
         renderRecentGoals();
         try { window.dispatchEvent(new Event('goals:updated')); } catch(_) {}
         renderChart();
+        startCountdownTicker();
 
         // Reset Goals button
         const resetBtn = document.getElementById('reset-goals-btn');
@@ -70,6 +72,58 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Confetti burst (emoji-based lightweight)
                 burstConfetti(e);
             });
+
+    // Countdown ticker: updates remaining time and auto-expire goals
+    function startCountdownTicker() {
+        setInterval(() => {
+            const all = getAllGoals();
+            let changed = false;
+            const now = Date.now();
+            all.forEach(g => {
+                if (!currentUser || g.userId !== currentUser.id) return;
+                if (g.dueAt && !g.completed && g.status !== 'missed') {
+                    const due = new Date(g.dueAt).getTime();
+                    if (now >= due) {
+                        g.status = 'missed';
+                        changed = true;
+                        pushNotification({ userId: currentUser.id, text: `Time up for goal: ${g.title}`, createdAt: new Date().toISOString() });
+                    }
+                }
+            });
+            if (changed) {
+                setAllGoals(all);
+                updateStatsDisplay();
+                renderRecentGoals();
+                try { window.dispatchEvent(new Event('goals:updated')); } catch(_) {}
+            }
+            // Update visible countdown labels
+            document.querySelectorAll('.countdown[data-goal-id]')?.forEach(el => {
+                const id = Number(el.getAttribute('data-goal-id'));
+                const g = all.find(x => x.id === id);
+                if (!g) return;
+                el.textContent = countdownLabel(g);
+            });
+        }, 1000);
+    }
+
+    function countdownLabel(goal) {
+        if (!goal || !goal.dueAt) return '';
+        if (goal.completed) return '✅ Done';
+        if (goal.status === 'missed') return '⛔ Time up';
+        const ms = new Date(goal.dueAt).getTime() - Date.now();
+        if (ms <= 0) return '⛔ Time up';
+        const s = Math.floor(ms/1000);
+        const hh = Math.floor(s/3600);
+        const mm = Math.floor((s%3600)/60);
+        const ss = s%60;
+        return `⏳ ${hh>0? String(hh).padStart(2,'0')+':':''}${String(mm).padStart(2,'0')}:${String(ss).padStart(2,'0')}`;
+    }
+
+    function pushNotification(n) {
+        const list = JSON.parse(localStorage.getItem('skillup_notifications') || '[]');
+        list.push({ userId: n.userId, text: n.text, createdAt: n.createdAt || new Date().toISOString(), read: false });
+        localStorage.setItem('skillup_notifications', JSON.stringify(list));
+    }
         }
 
         // Header animations
@@ -211,6 +265,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const goalFrequency = (goalFrequencyInput && goalFrequencyInput.value) || 'daily';
         const goalEmoji = (goalEmojiInput && goalEmojiInput.value) || '';
         const goalNotes = (goalNotesInput && goalNotesInput.value || '').trim();
+        const goalDurationMin = Number((goalDurationInput && goalDurationInput.value) || 0);
 
         // Validation
         if (!goalTitle) {
@@ -243,6 +298,12 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
+        // Ensure user is logged in before creating goal
+        if (!currentUser || !currentUser.id) {
+            showMessage('Please sign in to set goals', 'error');
+            return;
+        }
+
         // Calculate XP reward
         const xpReward = calculateXPReward();
 
@@ -262,7 +323,9 @@ document.addEventListener('DOMContentLoaded', function() {
             completedDate: null,
             frequency: goalFrequency,
             emoji: goalEmoji,
-            notes: goalNotes
+            notes: goalNotes,
+            durationMinutes: goalDurationMin > 0 ? goalDurationMin : null,
+            dueAt: goalDurationMin > 0 ? new Date(Date.now() + goalDurationMin*60*1000).toISOString() : null
         };
 
         // Persist goal to global list without affecting other users
@@ -465,7 +528,7 @@ document.addEventListener('DOMContentLoaded', function() {
             let progress = Math.round((elapsed / total) * 100);
             if (goal.completed) progress = 100;
             const radius = 28; const circ = 2 * Math.PI * radius; const offset = circ * (1 - progress/100);
-            const dueText = goal.completed ? `✅ Completed` : `Due: ${deadline.toLocaleDateString()}`;
+            const dueText = goal.completed ? `✅ Completed` : (goal.status === 'missed' ? '⛔ Time up' : `Due: ${deadline.toLocaleDateString()}`);
             const gradId = `gradRing-${goal.id}`;
 
             goalsHTML += `
@@ -485,7 +548,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     </svg>
                   </div>
                   <div class="title">${goal.emoji || ''} ${goal.title}</div>
-                  <div class="meta"><span class="chip">${getCategoryIcon(goal.category)} ${goal.category}</span><span class="chip">${goal.frequency || 'daily'}</span></div>
+                  <div class="meta"><span class="chip">${getCategoryIcon(goal.category)} ${goal.category}</span><span class="chip">${goal.frequency || 'daily'}</span><span class="chip">${goal.completed ? 'Completed' : (goal.status === 'missed' ? 'Missed' : 'Active')}</span>${goal.dueAt ? `<span class="chip countdown" data-goal-id="${goal.id}">${countdownLabel(goal)}</span>` : ''}</div>
                   <div class="actions">
                     <button class="btn-ghost complete-btn" data-goal-id="${goal.id}">${goal.completed ? 'Mark Active' : 'Mark as Done'}</button>
                   </div>

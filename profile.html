@@ -19,7 +19,18 @@
                 <li><a href="index.html#ai">AI Power</a></li>
                 <li><a href="about.html">About Us</a></li>
                 <li class="dropdown">
-                    <a href="profile.html" class="dropdown-toggle">👤 Profile</a>
+                    <a href="#" class="dropdown-toggle">👤 Profile</a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" id="dashboard-btn" href="goals.html">Dashboard</a>
+                        <button class="dropdown-item" type="button" id="notifications-toggle">Notifications <span id="notif-badge" class="notif-badge" style="display:none;">0</span></button>
+                        <button class="dropdown-item" type="button" id="logout-btn">Logout</button>
+                        <div id="notifications-panel" class="notifications-panel" style="display:none;">
+                            <div class="notifications-header">Notifications</div>
+                            <div id="notifications-list" class="notifications-list">
+                                <div class="notification-empty">No notifications</div>
+                            </div>
+                        </div>
+                    </div>
                 </li>
             </ul>
         </div>
@@ -147,6 +158,33 @@
                             </div>
                             <button class="setting-btn secondary" id="two-factor-btn">Enable</button>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Streak Calendar -->
+                <div class="profile-section">
+                    <h2>🔥 Streak Calendar</h2>
+                    <div class="streak-flex">
+                        <div class="streak-calendar-card">
+                            <div class="streak-cal-header">
+                                <button class="streak-cal-nav" id="streak-prev">‹</button>
+                                <div id="streak-month-label">Month YYYY</div>
+                                <button class="streak-cal-nav" id="streak-next">›</button>
+                            </div>
+                            <div id="streak-calendar" class="streak-calendar"></div>
+                        </div>
+                        <aside class="streak-side">
+                            <div class="flame-badge" aria-hidden="true">🔥</div>
+                            <div class="streak-side-count"><span id="streak-side-count">0</span> Days</div>
+                            <div class="streak-side-sub" id="streak-day-left">00:00 left today</div>
+                            <div class="milestone">
+                                <div class="milestone-head">
+                                    <span>Next Milestone</span>
+                                    <span id="streak-next-label">Day 7</span>
+                                </div>
+                                <div class="milestone-bar"><div id="streak-side-progress" class="milestone-fill" style="width:0%"></div></div>
+                            </div>
+                        </aside>
                     </div>
                 </div>
 

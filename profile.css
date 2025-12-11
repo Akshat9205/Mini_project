@@ -446,6 +446,56 @@ input:checked + .slider:before {
     font-size: 0.9rem;
 }
 
+/* Streak Calendar */
+.streak-calendar-card {
+    background: #ffffff;
+    border: 1px solid #eef0f6;
+    border-radius: 16px;
+    padding: 0.75rem;
+    max-width: 380px;
+}
+
+.streak-cal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.25rem;
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+
+.streak-cal-nav {
+    background: #f3f4f6;
+    border: 0;
+    border-radius: 8px;
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+}
+
+.streak-calendar { width: 100%; margin: 0 auto; }
+.streak-week-head { display: grid; grid-template-columns: repeat(7, 26px); gap: 6px; padding: 4px; color: #6b7280; font-weight: 600; text-align: center; justify-content: center; font-size: 0.8rem; }
+.streak-days { display: grid; grid-template-columns: repeat(7, 26px); grid-auto-rows: 26px; gap: 6px; padding: 4px; justify-content: center; }
+.streak-day { position: relative; width: 26px; height: 26px; display: grid; place-items: center; }
+.streak-day span { position: relative; z-index: 2; font-weight: 600; font-size: 0.8rem; color: #111827; }
+.streak-day::before { content: ""; position: absolute; inset: 0; border-radius: 999px; box-shadow: inset 0 0 0 2px rgba(0,0,0,0.06); }
+
+.streak-day.hit::before { background: #22c55e; box-shadow: 0 4px 10px rgba(34,197,94,0.35); }
+.streak-day.miss::before { background: #ef4444; opacity: 0.8; }
+.streak-day.neutral::before { background: #e5e7eb; }
+
+/* Right-side summary next to calendar */
+.streak-flex { display: grid; grid-template-columns: auto 1fr; gap: 20px; align-items: start; }
+.streak-side { background:#ffffff; border:1px solid #eef0f6; border-radius:16px; padding:16px; display:grid; gap:12px; align-content:start; box-shadow: 0 10px 24px rgba(0,0,0,0.08); min-width: 220px; }
+.flame-badge { width:56px; height:56px; border-radius:50%; display:grid; place-items:center; font-size:28px; background: radial-gradient(100% 100% at 30% 20%, #ffd1a1, #ff8a00); color:#7a1b00; animation:pulse 1.5s infinite ease-in-out; justify-self:center; }
+.streak-side-count { text-align:center; font-size:1.4rem; font-weight:800; color:#0f172a; }
+.streak-side-sub { text-align:center; font-size:0.9rem; color:#6b7280; }
+.milestone { display:grid; gap:8px; }
+.milestone-head { display:flex; justify-content:space-between; font-weight:700; color:#111827; }
+.milestone-bar { height:10px; background:#eef2f7; border-radius:999px; overflow:hidden; }
+.milestone-fill { height:100%; background: linear-gradient(90deg, #22c55e, #16a34a); width:0%; transition: width .6s ease; }
+@keyframes pulse { 0%,100%{ transform: scale(1); box-shadow: 0 0 0 0 rgba(255,138,0,0.35);} 50%{ transform: scale(1.06); box-shadow: 0 0 0 12px rgba(255,138,0,0);} }
+
 /* Profile Actions */
 .profile-actions {
     display: flex;
@@ -502,12 +552,6 @@ input:checked + .slider:before {
     .profile-header {
         flex-direction: column;
         text-align: center;
-        padding: 1.5rem;
-    }
-
-    .profile-avatar-section {
-        flex-direction: column;
-        text-align: center;
         gap: 1.5rem;
     }
 
@@ -515,6 +559,11 @@ input:checked + .slider:before {
         justify-content: center;
         gap: 1.5rem;
     }
+
+    /* Stack calendar and side panel */
+    .streak-flex { grid-template-columns: 1fr; }
+    .streak-calendar-card { max-width: 100%; justify-self: center; }
+    .streak-side { min-width: auto; }
 
     .info-grid {
         grid-template-columns: 1fr;
@@ -570,4 +619,14 @@ input:checked + .slider:before {
         width: 100px;
         height: 100px;
     }
+
+    /* Smaller calendar cells and controls */
+    .streak-cal-nav { width: 26px; height: 26px; }
+    .streak-week-head { grid-template-columns: repeat(7, 22px); gap: 4px; font-size: 0.75rem; }
+    .streak-days { grid-template-columns: repeat(7, 22px); grid-auto-rows: 22px; gap: 4px; }
+    .streak-day { width: 22px; height: 22px; }
+    .streak-day span { font-size: 0.75rem; }
+    .streak-calendar-card { padding: 0.6rem; }
+    .flame-badge { width: 48px; height: 48px; font-size: 24px; }
+    .streak-side-count { font-size: 1.2rem; }
 }

@@ -5,8 +5,13 @@ let isEditing = false;
 function initProfile() {
     checkAuthState();
     loadUserProfile();
+    reconcileGoalsOwnership();
     setupEventListeners();
     loadUserProgress();
+    // Initialize streak calendar and notifications
+    initStreakCalendar();
+    updateNotificationsUI();
+    startStreakSidebarTicker();
 }
 
 // Helper to safely get/set current user
@@ -228,6 +233,19 @@ function setupEventListeners() {
         dropdownToggle.addEventListener('click', toggleDropdown);
     }
 
+    // Notifications toggle inside dropdown
+    const notifToggle = document.getElementById('notifications-toggle');
+    if (notifToggle) {
+        notifToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const panel = document.getElementById('notifications-panel');
+            if (panel) {
+                panel.style.display = panel.style.display === 'none' || panel.style.display === '' ? 'block' : 'none';
+                if (panel.style.display === 'block') markAllNotificationsRead();
+            }
+        });
+    }
+
     // Close dropdown when clicking outside
     document.addEventListener('click', closeDropdownOnOutsideClick);
 
@@ -246,8 +264,174 @@ function setupEventListeners() {
         if (!document.hidden) loadUserProgress();
     });
 
+    window.addEventListener('goals:updated', () => {
+        loadUserProgress();
+    });
+
     // Update 2FA button label on load
     updateTwoFactorButton();
+
+    // Streak month navigation
+    const prev = document.getElementById('streak-prev');
+    const next = document.getElementById('streak-next');
+    if (prev) prev.addEventListener('click', () => shiftStreakMonth(-1));
+    if (next) next.addEventListener('click', () => shiftStreakMonth(1));
+}
+
+function reconcileGoalsOwnership() {
+    const cu = getCurrentUser();
+    if (!cu || !cu.id) return;
+    const key = 'skillup_goals';
+    const all = JSON.parse(localStorage.getItem(key) || '[]');
+    let changed = false;
+    for (const g of all) {
+        if (!g.userId) { g.userId = cu.id; changed = true; }
+    }
+    if (changed) localStorage.setItem(key, JSON.stringify(all));
+}
+
+// ===== Streak Calendar =====
+let streakCurrentMonth = new Date();
+
+function initStreakCalendar() {
+    // Normalize to first day of month
+    streakCurrentMonth.setDate(1);
+    renderStreakCalendar();
+}
+
+function shiftStreakMonth(delta) {
+    streakCurrentMonth.setMonth(streakCurrentMonth.getMonth() + delta);
+    renderStreakCalendar();
+}
+
+function getUserStreakDays() {
+    const cu = getCurrentUser();
+    if (!cu) return new Set();
+    const map = JSON.parse(localStorage.getItem('skillup_streak_days') || '{}');
+    const arr = map[String(cu.id)] || [];
+    return new Set(arr);
+}
+
+function renderStreakCalendar() {
+    const container = document.getElementById('streak-calendar');
+    const label = document.getElementById('streak-month-label');
+    if (!container || !label) return;
+
+    const year = streakCurrentMonth.getFullYear();
+    const month = streakCurrentMonth.getMonth();
+    label.textContent = streakCurrentMonth.toLocaleString(undefined, { month: 'long', year: 'numeric' });
+
+    const firstDay = new Date(year, month, 1);
+    const startWeekday = (firstDay.getDay() + 6) % 7; // make Monday=0
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const today = new Date();
+    const isSameMonth = today.getFullYear() === year && today.getMonth() === month;
+    const streakDays = getUserStreakDays();
+
+    // Build grid: header + days
+    const weekLabels = ['M','T','W','T','F','S','S'];
+    let html = '<div class="streak-week-head">' + weekLabels.map(w=>`<div>${w}</div>`).join('') + '</div>';
+    html += '<div class="streak-days">';
+    for (let i = 0; i < startWeekday; i++) html += '<div class="empty"></div>';
+    for (let d = 1; d <= daysInMonth; d++) {
+        const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+        const dayDate = new Date(year, month, d);
+        let cls = 'neutral';
+        if (streakDays.has(dateStr)) cls = 'hit';
+        else if (dayDate < new Date(today.getFullYear(), today.getMonth(), today.getDate())) cls = 'miss';
+        html += `<div class="streak-day ${cls}"><span>${d}</span></div>`;
+    }
+    html += '</div>';
+    container.innerHTML = html;
+}
+
+// ===== Streak Sidebar (right panel) =====
+function nextMilestoneTarget(days) {
+    if (days < 7) return 7;
+    if (days < 30) return 30;
+    if (days < 50) return 50;
+    return Math.ceil((days + 10) / 10) * 10; // next round number
+}
+
+function updateStreakSidebar() {
+    const countEl = document.getElementById('streak-side-count');
+    const leftEl = document.getElementById('streak-day-left');
+    const progEl = document.getElementById('streak-side-progress');
+    const labelEl = document.getElementById('streak-next-label');
+    if (!countEl || !leftEl || !progEl || !labelEl) return;
+
+    const days = calculateStreak();
+    countEl.textContent = days;
+
+    // time left today (until midnight)
+    const now = new Date();
+    const end = new Date(now);
+    end.setHours(23,59,59,999);
+    const ms = end - now;
+    const s = Math.max(0, Math.floor(ms/1000));
+    const hh = Math.floor(s/3600);
+    const mm = Math.floor((s%3600)/60);
+    const ss = s%60;
+    leftEl.textContent = `${String(hh).padStart(2,'0')}:${String(mm).padStart(2,'0')}:${String(ss).padStart(2,'0')} left today`;
+
+    // milestone progress
+    const target = nextMilestoneTarget(days);
+    labelEl.textContent = `Day ${target}`;
+    const pct = Math.max(0, Math.min(100, Math.round((days/target)*100)));
+    progEl.style.width = pct + '%';
+}
+
+let __streakSidebarInt;
+function startStreakSidebarTicker() {
+    updateStreakSidebar();
+    if (__streakSidebarInt) clearInterval(__streakSidebarInt);
+    __streakSidebarInt = setInterval(updateStreakSidebar, 1000);
+}
+
+// ===== Notifications in dropdown =====
+function getUserNotifications() {
+    const cu = getCurrentUser();
+    const list = JSON.parse(localStorage.getItem('skillup_notifications') || '[]');
+    return cu ? list.filter(n => n.userId === cu.id) : [];
+}
+
+function updateNotificationsUI() {
+    const listEl = document.getElementById('notifications-list');
+    const badge = document.getElementById('notif-badge');
+    const all = getUserNotifications();
+    const unread = all.filter(n => !n.read);
+    if (badge) {
+        if (unread.length > 0) {
+            badge.textContent = String(unread.length);
+            badge.style.display = 'inline-block';
+        } else {
+            badge.style.display = 'none';
+        }
+    }
+    if (listEl) {
+        if (all.length === 0) {
+            listEl.innerHTML = '<div class="notification-empty">No notifications</div>';
+        } else {
+            listEl.innerHTML = all
+                .sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt))
+                .map(n => `
+                    <div class="notification-item ${n.read ? '' : 'unread'}">
+                        <div class="notif-text">${n.text}</div>
+                        <div class="notif-time">${new Date(n.createdAt).toLocaleString()}</div>
+                    </div>
+                `).join('');
+        }
+    }
+}
+
+function markAllNotificationsRead() {
+    const cu = getCurrentUser();
+    if (!cu) return;
+    const list = JSON.parse(localStorage.getItem('skillup_notifications') || '[]');
+    let changed = false;
+    list.forEach(n => { if (n.userId === cu.id && !n.read) { n.read = true; changed = true; } });
+    if (changed) localStorage.setItem('skillup_notifications', JSON.stringify(list));
+    updateNotificationsUI();
 }
 
 // Toggle edit mode
